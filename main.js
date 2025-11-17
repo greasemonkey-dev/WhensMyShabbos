@@ -1,5 +1,5 @@
 // MapTiler API Key - Replace with your own key from https://cloud.maptiler.com/
-const MAPTILER_API_KEY = 'YOUR_MAPTILER_API_KEY_HERE';
+const MAPTILER_API_KEY = 'IOegHViiczZRkx2lZpbB';
 
 // Initialize map
 let map;
