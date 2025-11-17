@@ -13,17 +13,22 @@ async function init() {
         return;
     }
 
-    // Initialize map with default view
+    // Initialize map with world view for dramatic zoom effect
     map = new maptilersdk.Map({
         container: 'map',
         style: maptilersdk.MapStyle.STREETS,
-        center: [-74.006, 40.7128], // Default to NYC
-        zoom: 12,
-        apiKey: MAPTILER_API_KEY
+        center: [0, 20], // Center of world
+        zoom: 1.5, // World view
+        apiKey: MAPTILER_API_KEY,
+        pitch: 0, // Start flat
+        bearing: 0
     });
 
-    // Get user's location
-    getUserLocation();
+    // Wait for map to load before getting user location
+    map.on('load', () => {
+        // Get user's location after map is ready
+        getUserLocation();
+    });
 
     // Add click event to map
     map.on('click', async (e) => {
@@ -40,14 +45,24 @@ function getUserLocation() {
             async (position) => {
                 const { latitude, longitude } = position.coords;
 
-                // Center map on user location
+                // Beautiful smooth zoom animation from world view to user location
                 map.flyTo({
                     center: [longitude, latitude],
-                    zoom: 13
+                    zoom: 14,
+                    speed: 0.8, // Slower, more dramatic zoom
+                    curve: 1.5, // More curved path for cinematic effect
+                    duration: 3500, // 3.5 seconds for smooth animation
+                    essential: true,
+                    pitch: 45, // Add tilt for 3D effect
+                    bearing: 0
                 });
 
-                // Add marker and get Shabbos times
-                updateMarker(latitude, longitude);
+                // Wait a moment before adding marker for better visual flow
+                setTimeout(() => {
+                    updateMarker(latitude, longitude);
+                }, 2000);
+
+                // Fetch Shabbos times while animation is happening
                 await updateShabbosInfo(latitude, longitude);
             },
             (error) => {
@@ -66,7 +81,18 @@ function updateMarker(lat, lng) {
         userMarker.remove();
     }
 
-    userMarker = new maptilersdk.Marker({ color: '#667eea' })
+    // Create a custom pulsing marker element
+    const markerElement = document.createElement('div');
+    markerElement.className = 'custom-marker';
+    markerElement.innerHTML = `
+        <div class="marker-pulse"></div>
+        <div class="marker-pin">📍</div>
+    `;
+
+    userMarker = new maptilersdk.Marker({
+        element: markerElement,
+        anchor: 'bottom'
+    })
         .setLngLat([lng, lat])
         .addTo(map);
 }
