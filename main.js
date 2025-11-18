@@ -1,6 +1,19 @@
 // MapTiler API Key - Replace with your own key from https://cloud.maptiler.com/
 const MAPTILER_API_KEY = 'IOegHViiczZRkx2lZpbB';
 
+// Suppress MapLibre warnings caused by ad blockers
+const originalConsoleError = console.error;
+console.error = function(...args) {
+    const message = args[0]?.toString() || '';
+    // Filter out known ad blocker-related warnings
+    if (message.includes('could not be loaded') ||
+        message.includes('styleimagemissing') ||
+        message.includes('Fetch failed')) {
+        return; // Silently ignore
+    }
+    originalConsoleError.apply(console, args);
+};
+
 // Initialize map
 let map;
 let userMarker;
