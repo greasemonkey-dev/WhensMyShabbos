@@ -29,7 +29,7 @@ async function init() {
     // Initialize map with world view for dramatic zoom effect
     map = new maptilersdk.Map({
         container: 'map',
-        style: maptilersdk.MapStyle.STREETS,
+        style: maptilersdk.MapStyle.OUTDOOR, // Better colors than STREETS
         center: [0, 20], // Center of world
         zoom: 1.5, // World view
         apiKey: MAPTILER_API_KEY,
@@ -64,6 +64,19 @@ async function init() {
 
     // Wait for map to load before getting user location
     map.on('load', () => {
+        // Change the water/ocean color from white to a nice blue
+        try {
+            if (map.getLayer('water')) {
+                map.setPaintProperty('water', 'fill-color', '#a8c5e6');
+            }
+            // Change background color if it exists
+            if (map.getLayer('background')) {
+                map.setPaintProperty('background', 'background-color', '#d4e2f0');
+            }
+        } catch (error) {
+            console.log('Could not modify map colors');
+        }
+
         // Get user's location after map is ready
         getUserLocation();
     });
