@@ -64,17 +64,32 @@ async function init() {
 
     // Wait for map to load before getting user location
     map.on('load', () => {
-        // Change the water/ocean color from white to a nice blue
+        // DEBUG: List all layers to find what's white
+        console.log('=== MAP LAYERS DEBUG ===');
+        const layers = map.getStyle().layers;
+        layers.forEach(layer => {
+            console.log(`Layer: ${layer.id}, Type: ${layer.type}`);
+            if (layer.paint) {
+                console.log('  Paint:', layer.paint);
+            }
+        });
+        console.log('=== END DEBUG ===');
+
+        // Try to fix white backgrounds
         try {
-            if (map.getLayer('water')) {
-                map.setPaintProperty('water', 'fill-color', '#a8c5e6');
-            }
-            // Change background color if it exists
-            if (map.getLayer('background')) {
-                map.setPaintProperty('background', 'background-color', '#d4e2f0');
-            }
+            // Iterate through all layers and fix any white colors
+            layers.forEach(layer => {
+                if (layer.type === 'background') {
+                    console.log(`Setting background layer "${layer.id}" to blue-grey`);
+                    map.setPaintProperty(layer.id, 'background-color', '#d4e2f0');
+                }
+                if (layer.type === 'fill' && (layer.id.includes('water') || layer.id.includes('ocean'))) {
+                    console.log(`Setting water layer "${layer.id}" to light blue`);
+                    map.setPaintProperty(layer.id, 'fill-color', '#a8c5e6');
+                }
+            });
         } catch (error) {
-            console.log('Could not modify map colors');
+            console.log('Could not modify map colors:', error);
         }
 
         // Get user's location after map is ready
