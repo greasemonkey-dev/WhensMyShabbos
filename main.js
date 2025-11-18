@@ -36,7 +36,7 @@ async function init() {
         pitch: 0, // Start flat
         bearing: 0,
         // Set background color to prevent white canvas
-        backgroundColor: '#e8eaf6'
+        backgroundColor: '#1a1a2e'
     });
 
     // Handle missing sprite images by creating a blank placeholder
@@ -70,14 +70,14 @@ async function init() {
         try {
             // Try to set the background layer color
             if (map.getLayer('background')) {
-                map.setPaintProperty('background', 'background-color', '#e8eaf6');
+                map.setPaintProperty('background', 'background-color', '#1a1a2e');
             } else {
                 // If no background layer exists, add one
                 map.addLayer({
                     id: 'background',
                     type: 'background',
                     paint: {
-                        'background-color': '#e8eaf6'
+                        'background-color': '#1a1a2e'
                     }
                 }, map.getStyle().layers[0]?.id); // Add as first layer
             }
@@ -88,7 +88,7 @@ async function init() {
         // Also set canvas background via style
         const canvas = document.querySelector('.maplibregl-canvas');
         if (canvas) {
-            canvas.style.backgroundColor = '#e8eaf6';
+            canvas.style.backgroundColor = '#1a1a2e';
         }
 
         // Get user's location after map is ready
