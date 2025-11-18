@@ -162,7 +162,25 @@ async function getLocationName(lat, lng) {
         const data = await response.json();
 
         if (data.features && data.features.length > 0) {
-            return data.features[0].place_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            const feature = data.features[0];
+
+            // Extract city and country from the place_name
+            // The place_name format is typically: "Street, City, State, Country"
+            // We want just "City, Country" or "City, State, Country"
+            const placeName = feature.place_name || '';
+            const parts = placeName.split(',').map(p => p.trim());
+
+            // Skip the first part (street/address) and take city onwards
+            // Usually: [street, city, region/state, country]
+            if (parts.length > 2) {
+                // Return city, region, country (skip street address)
+                return parts.slice(1).join(', ');
+            } else if (parts.length > 1) {
+                // Return everything except first part
+                return parts.slice(1).join(', ');
+            }
+
+            return placeName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
         }
         return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
     } catch (error) {
