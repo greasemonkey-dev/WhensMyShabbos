@@ -1,6 +1,19 @@
 // MapTiler API Key - Replace with your own key from https://cloud.maptiler.com/
 const MAPTILER_API_KEY = 'IOegHViiczZRkx2lZpbB';
 
+// Suppress MapLibre warnings caused by ad blockers
+const originalConsoleError = console.error;
+console.error = function(...args) {
+    const message = args[0]?.toString() || '';
+    // Filter out known ad blocker-related warnings
+    if (message.includes('could not be loaded') ||
+        message.includes('styleimagemissing') ||
+        message.includes('Fetch failed')) {
+        return; // Silently ignore
+    }
+    originalConsoleError.apply(console, args);
+};
+
 // Initialize map
 let map;
 let userMarker;
@@ -16,7 +29,7 @@ async function init() {
     // Initialize map with world view for dramatic zoom effect
     map = new maptilersdk.Map({
         container: 'map',
-        style: maptilersdk.MapStyle.STREETS,
+        style: maptilersdk.MapStyle.STREETS, // No white Glacier layer
         center: [0, 20], // Center of world
         zoom: 1.5, // World view
         apiKey: MAPTILER_API_KEY,
@@ -24,9 +37,33 @@ async function init() {
         bearing: 0
     });
 
+    // Handle missing sprite images by creating a blank placeholder
+    // This fixes issues with ad blockers blocking map sprites
+    map.on('styleimagemissing', (e) => {
+        const missingImageId = e.id;
+
+        // Skip if ID is invalid (empty, whitespace, etc.)
+        if (!missingImageId || missingImageId.trim() === '') {
+            return;
+        }
+
+        // Create a blank 1x1 transparent image as placeholder
+        const width = 1;
+        const height = 1;
+        const data = new Uint8Array(width * height * 4);
+
+        // Add the missing image to prevent errors
+        try {
+            if (!map.hasImage(missingImageId)) {
+                map.addImage(missingImageId, { width, height, data });
+            }
+        } catch (error) {
+            // Silently ignore - some IDs can't be added
+        }
+    });
+
     // Wait for map to load before getting user location
     map.on('load', () => {
-        // Get user's location after map is ready
         getUserLocation();
     });
 
@@ -125,7 +162,47 @@ async function getLocationName(lat, lng) {
         const data = await response.json();
 
         if (data.features && data.features.length > 0) {
-            return data.features[0].place_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            const feature = data.features[0];
+
+            // Use context array to build clean location name without addresses/zip codes
+            // Context contains structured data: place, region, country, etc.
+            const locationParts = [];
+
+            // Get place/city name from context
+            if (feature.context) {
+                const place = feature.context.find(c => c.id && c.id.startsWith('place'));
+                const region = feature.context.find(c => c.id && c.id.startsWith('region'));
+                const country = feature.context.find(c => c.id && c.id.startsWith('country'));
+
+                if (place) locationParts.push(place.text);
+                if (region) locationParts.push(region.text);
+                if (country) locationParts.push(country.text);
+            }
+
+            // If we got structured data, return it
+            if (locationParts.length > 0) {
+                return locationParts.join(', ');
+            }
+
+            // Fallback: parse place_name and remove anything that looks like a zip code
+            const placeName = feature.place_name || '';
+            const parts = placeName.split(',').map(p => p.trim());
+
+            // Filter out parts that are just numbers (zip codes) or start with numbers
+            const filtered = parts.filter(part => {
+                // Remove if it's all digits (zip code)
+                if (/^\d+$/.test(part)) return false;
+                // Remove if it starts with digits followed by space (e.g., "12345 Street")
+                if (/^\d+\s/.test(part)) return false;
+                return true;
+            });
+
+            // Skip first part (likely street address) and return the rest
+            if (filtered.length > 1) {
+                return filtered.slice(1).join(', ');
+            }
+
+            return filtered.join(', ') || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
         }
         return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
     } catch (error) {
