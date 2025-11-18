@@ -75,17 +75,20 @@ async function init() {
         });
         console.log('=== END DEBUG ===');
 
-        // Try to fix white backgrounds
+        // Fix white backgrounds - especially the Glacier layer!
         try {
-            // Iterate through all layers and fix any white colors
             layers.forEach(layer => {
                 if (layer.type === 'background') {
-                    console.log(`Setting background layer "${layer.id}" to blue-grey`);
+                    console.log(`✓ Setting background layer "${layer.id}" to soft blue-grey`);
                     map.setPaintProperty(layer.id, 'background-color', '#d4e2f0');
                 }
-                if (layer.type === 'fill' && (layer.id.includes('water') || layer.id.includes('ocean'))) {
-                    console.log(`Setting water layer "${layer.id}" to light blue`);
-                    map.setPaintProperty(layer.id, 'fill-color', '#a8c5e6');
+                if (layer.id === 'Glacier') {
+                    console.log(`✓ FIXING WHITE GLACIER! Changing from white to ice blue`);
+                    map.setPaintProperty('Glacier', 'fill-color', '#e6f2ff');
+                }
+                if (layer.id === 'Water') {
+                    console.log(`✓ Setting water layer to light blue`);
+                    map.setPaintProperty('Water', 'fill-color', '#a8c5e6');
                 }
             });
         } catch (error) {
