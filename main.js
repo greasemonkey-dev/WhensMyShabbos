@@ -136,7 +136,8 @@ async function getLocationName(lat, lng) {
 
 // Get Shabbos times from HebCal API
 async function getShabbosTimesFromHebCal(lat, lng) {
-    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}&tzid=auto`;
+    // Don't use tzid=auto - HebCal will auto-detect timezone from coordinates
+    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}`;
 
     console.log('Fetching Shabbos times from:', url);
 
