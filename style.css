@@ -82,6 +82,8 @@ header h1 {
     width: 100%;
     min-height: 0; /* Fix for flex children */
     position: relative;
+    background: #e5e5e5; /* Fallback color while map loads */
+    overflow: hidden; /* Ensure no overflow */
 }
 
 /* Let the map canvas render naturally - no forced backgrounds */
@@ -89,6 +91,11 @@ header h1 {
 .mapboxgl-map {
     width: 100% !important;
     height: 100% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
 }
 
 .maplibregl-canvas-container,
@@ -133,9 +140,7 @@ header h1 {
 }
 
 /* Target any remaining white divs in map */
-#map > div,
-#map .maplibregl-map,
-#map .mapboxgl-map {
+#map > div:not(.maplibregl-map):not(.mapboxgl-map) {
     background: transparent !important;
 }
 
