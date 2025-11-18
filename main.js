@@ -24,10 +24,19 @@ async function init() {
         bearing: 0
     });
 
-    // Suppress missing sprite image warnings
+    // Handle missing sprite images by creating a blank placeholder
     map.on('styleimagemissing', (e) => {
-        // Silently ignore missing image warnings from MapTiler
-        // These are harmless warnings about missing sprite icons
+        const missingImageId = e.id;
+
+        // Create a blank 1x1 transparent image as placeholder
+        const width = 1;
+        const height = 1;
+        const data = new Uint8Array(width * height * 4);
+
+        // Add the missing image to prevent errors
+        if (!map.hasImage(missingImageId)) {
+            map.addImage(missingImageId, { width, height, data });
+        }
     });
 
     // Wait for map to load before getting user location
