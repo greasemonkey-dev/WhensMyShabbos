@@ -34,7 +34,9 @@ async function init() {
         zoom: 1.5, // World view
         apiKey: MAPTILER_API_KEY,
         pitch: 0, // Start flat
-        bearing: 0
+        bearing: 0,
+        // Set background color to prevent white canvas
+        backgroundColor: '#e8eaf6'
     });
 
     // Handle missing sprite images by creating a blank placeholder
@@ -64,6 +66,9 @@ async function init() {
 
     // Wait for map to load before getting user location
     map.on('load', () => {
+        // Set map background color to prevent white showing through
+        map.setPaintProperty('background', 'background-color', '#e8eaf6');
+
         // Get user's location after map is ready
         getUserLocation();
     });
