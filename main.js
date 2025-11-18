@@ -67,7 +67,29 @@ async function init() {
     // Wait for map to load before getting user location
     map.on('load', () => {
         // Set map background color to prevent white showing through
-        map.setPaintProperty('background', 'background-color', '#e8eaf6');
+        try {
+            // Try to set the background layer color
+            if (map.getLayer('background')) {
+                map.setPaintProperty('background', 'background-color', '#e8eaf6');
+            } else {
+                // If no background layer exists, add one
+                map.addLayer({
+                    id: 'background',
+                    type: 'background',
+                    paint: {
+                        'background-color': '#e8eaf6'
+                    }
+                }, map.getStyle().layers[0]?.id); // Add as first layer
+            }
+        } catch (error) {
+            console.log('Could not set background layer, using CSS fallback');
+        }
+
+        // Also set canvas background via style
+        const canvas = document.querySelector('.maplibregl-canvas');
+        if (canvas) {
+            canvas.style.backgroundColor = '#e8eaf6';
+        }
 
         // Get user's location after map is ready
         getUserLocation();

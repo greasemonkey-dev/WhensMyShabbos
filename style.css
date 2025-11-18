@@ -85,15 +85,23 @@ header h1 {
     background: #e8eaf6;
 }
 
-/* Handle the map canvas itself */
+/* Handle the map canvas itself - FORCE purple background everywhere */
 .maplibregl-canvas-container,
-.mapboxgl-canvas-container {
-    background: #e8eaf6 !important;
+.mapboxgl-canvas-container,
+.maplibregl-canvas-container canvas,
+.mapboxgl-canvas-container canvas {
+    background-color: #e8eaf6 !important;
 }
 
 .maplibregl-canvas,
 .mapboxgl-canvas {
-    background: transparent !important;
+    background-color: #e8eaf6 !important;
+}
+
+/* Target the map wrapper */
+.maplibregl-map,
+.mapboxgl-map {
+    background-color: #e8eaf6 !important;
 }
 
 /* Completely hide MapTiler branding and controls that create white banners */
