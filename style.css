@@ -85,6 +85,17 @@ header h1 {
     background: #e8eaf6;
 }
 
+/* Handle the map canvas itself */
+.maplibregl-canvas-container,
+.mapboxgl-canvas-container {
+    background: #e8eaf6 !important;
+}
+
+.maplibregl-canvas,
+.mapboxgl-canvas {
+    background: transparent !important;
+}
+
 /* Completely hide MapTiler branding and controls that create white banners */
 .maplibregl-ctrl-logo,
 .mapboxgl-ctrl-logo,
@@ -115,7 +126,9 @@ header h1 {
 }
 
 /* Target any remaining white divs in map */
-#map > div {
+#map > div,
+#map .maplibregl-map,
+#map .mapboxgl-map {
     background: transparent !important;
 }
 
