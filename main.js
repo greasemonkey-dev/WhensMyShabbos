@@ -141,7 +141,19 @@ async function getShabbosTimesFromHebCal(lat, lng) {
 
     console.log('Fetching Shabbos times from:', url);
 
-    const response = await fetch(url);
+    let response;
+    try {
+        response = await fetch(url, {
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+    } catch (fetchError) {
+        console.error('Fetch error (likely CORS or network issue):', fetchError);
+        throw new Error(`Network error fetching Shabbos times. This may be due to CORS restrictions. Try opening the app via a web server (npm start) instead of file://.`);
+    }
+
     console.log('Response status:', response.status, response.statusText);
 
     if (!response.ok) {
