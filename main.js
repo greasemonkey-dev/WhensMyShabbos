@@ -24,6 +24,12 @@ async function init() {
         bearing: 0
     });
 
+    // Suppress missing sprite image warnings
+    map.on('styleimagemissing', (e) => {
+        // Silently ignore missing image warnings from MapTiler
+        // These are harmless warnings about missing sprite icons
+    });
+
     // Wait for map to load before getting user location
     map.on('load', () => {
         // Get user's location after map is ready
