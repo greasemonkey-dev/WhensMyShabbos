@@ -85,18 +85,21 @@ header h1 {
     background: #e8eaf6;
 }
 
-/* Hide MapTiler logo banner if it appears as white */
+/* Completely hide MapTiler branding and controls that create white banners */
 .maplibregl-ctrl-logo,
 .mapboxgl-ctrl-logo,
-.maptiler-ctrl-logo {
-    background: transparent !important;
+.maptiler-ctrl-logo,
+.maplibregl-compact,
+.mapboxgl-compact {
+    display: none !important;
 }
 
-/* Style MapTiler attribution to not show as white banner */
+/* Hide attribution banner */
 .maplibregl-ctrl-attrib,
-.mapboxgl-ctrl-attrib {
-    background: rgba(255, 255, 255, 0.8) !important;
-    backdrop-filter: blur(10px);
+.mapboxgl-ctrl-attrib,
+.maplibregl-ctrl-attrib-inner,
+.mapboxgl-ctrl-attrib-inner {
+    display: none !important;
 }
 
 /* Remove any white backgrounds from map controls */
@@ -108,6 +111,11 @@ header h1 {
 .mapboxgl-ctrl-top-right,
 .mapboxgl-ctrl-bottom-left,
 .mapboxgl-ctrl-bottom-right {
+    background: transparent !important;
+}
+
+/* Target any remaining white divs in map */
+#map > div {
     background: transparent !important;
 }
 
