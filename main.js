@@ -164,23 +164,45 @@ async function getLocationName(lat, lng) {
         if (data.features && data.features.length > 0) {
             const feature = data.features[0];
 
-            // Extract city and country from the place_name
-            // The place_name format is typically: "Street, City, State, Country"
-            // We want just "City, Country" or "City, State, Country"
+            // Use context array to build clean location name without addresses/zip codes
+            // Context contains structured data: place, region, country, etc.
+            const locationParts = [];
+
+            // Get place/city name from context
+            if (feature.context) {
+                const place = feature.context.find(c => c.id && c.id.startsWith('place'));
+                const region = feature.context.find(c => c.id && c.id.startsWith('region'));
+                const country = feature.context.find(c => c.id && c.id.startsWith('country'));
+
+                if (place) locationParts.push(place.text);
+                if (region) locationParts.push(region.text);
+                if (country) locationParts.push(country.text);
+            }
+
+            // If we got structured data, return it
+            if (locationParts.length > 0) {
+                return locationParts.join(', ');
+            }
+
+            // Fallback: parse place_name and remove anything that looks like a zip code
             const placeName = feature.place_name || '';
             const parts = placeName.split(',').map(p => p.trim());
 
-            // Skip the first part (street/address) and take city onwards
-            // Usually: [street, city, region/state, country]
-            if (parts.length > 2) {
-                // Return city, region, country (skip street address)
-                return parts.slice(1).join(', ');
-            } else if (parts.length > 1) {
-                // Return everything except first part
-                return parts.slice(1).join(', ');
+            // Filter out parts that are just numbers (zip codes) or start with numbers
+            const filtered = parts.filter(part => {
+                // Remove if it's all digits (zip code)
+                if (/^\d+$/.test(part)) return false;
+                // Remove if it starts with digits followed by space (e.g., "12345 Street")
+                if (/^\d+\s/.test(part)) return false;
+                return true;
+            });
+
+            // Skip first part (likely street address) and return the rest
+            if (filtered.length > 1) {
+                return filtered.slice(1).join(', ');
             }
 
-            return placeName || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            return filtered.join(', ') || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
         }
         return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
     } catch (error) {
