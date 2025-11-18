@@ -112,7 +112,7 @@ async function updateShabbosInfo(lat, lng) {
         displayShabbosInfo(locationName, shabbosData);
     } catch (error) {
         console.error('Error fetching Shabbos info:', error);
-        showError('Unable to fetch Shabbos times. Please try again.');
+        showError(`Unable to fetch Shabbos times: ${error.message}. Please check the browser console for details.`);
     }
 }
 
@@ -138,12 +138,28 @@ async function getLocationName(lat, lng) {
 async function getShabbosTimesFromHebCal(lat, lng) {
     const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}&tzid=auto`;
 
+    console.log('Fetching Shabbos times from:', url);
+
     const response = await fetch(url);
+    console.log('Response status:', response.status, response.statusText);
+
     if (!response.ok) {
-        throw new Error('Failed to fetch Shabbos times');
+        const errorText = await response.text();
+        console.error('HebCal API error:', errorText);
+        throw new Error(`Failed to fetch Shabbos times: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('HebCal API response:', data);
+
+    // Validate response has items
+    if (!data.items || !Array.isArray(data.items)) {
+        throw new Error('Invalid response from HebCal API: missing items array');
+    }
+
+    if (data.items.length === 0) {
+        throw new Error('No Shabbos times found for this location');
+    }
 
     // Parse the response
     let candleLighting = null;
