@@ -25,8 +25,14 @@ async function init() {
     });
 
     // Handle missing sprite images by creating a blank placeholder
+    // This fixes issues with ad blockers blocking map sprites
     map.on('styleimagemissing', (e) => {
         const missingImageId = e.id;
+
+        // Skip if ID is invalid (empty, whitespace, etc.)
+        if (!missingImageId || missingImageId.trim() === '') {
+            return;
+        }
 
         // Create a blank 1x1 transparent image as placeholder
         const width = 1;
@@ -34,8 +40,12 @@ async function init() {
         const data = new Uint8Array(width * height * 4);
 
         // Add the missing image to prevent errors
-        if (!map.hasImage(missingImageId)) {
-            map.addImage(missingImageId, { width, height, data });
+        try {
+            if (!map.hasImage(missingImageId)) {
+                map.addImage(missingImageId, { width, height, data });
+            }
+        } catch (error) {
+            // Silently ignore - some IDs can't be added
         }
     });
 
