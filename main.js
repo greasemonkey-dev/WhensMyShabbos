@@ -29,7 +29,7 @@ async function init() {
     // Initialize map with world view for dramatic zoom effect
     map = new maptilersdk.Map({
         container: 'map',
-        style: maptilersdk.MapStyle.OUTDOOR, // Better colors than STREETS
+        style: maptilersdk.MapStyle.STREETS, // No white Glacier layer
         center: [0, 20], // Center of world
         zoom: 1.5, // World view
         apiKey: MAPTILER_API_KEY,
@@ -64,38 +64,6 @@ async function init() {
 
     // Wait for map to load before getting user location
     map.on('load', () => {
-        // DEBUG: List all layers to find what's white
-        console.log('=== MAP LAYERS DEBUG ===');
-        const layers = map.getStyle().layers;
-        layers.forEach(layer => {
-            console.log(`Layer: ${layer.id}, Type: ${layer.type}`);
-            if (layer.paint) {
-                console.log('  Paint:', layer.paint);
-            }
-        });
-        console.log('=== END DEBUG ===');
-
-        // Fix white backgrounds - especially the Glacier layer!
-        try {
-            layers.forEach(layer => {
-                if (layer.type === 'background') {
-                    console.log(`✓ Setting background layer "${layer.id}" to soft blue-grey`);
-                    map.setPaintProperty(layer.id, 'background-color', '#d4e2f0');
-                }
-                if (layer.id === 'Glacier') {
-                    console.log(`✓ FIXING WHITE GLACIER! Changing from white to ice blue`);
-                    map.setPaintProperty('Glacier', 'fill-color', '#e6f2ff');
-                }
-                if (layer.id === 'Water') {
-                    console.log(`✓ Setting water layer to light blue`);
-                    map.setPaintProperty('Water', 'fill-color', '#a8c5e6');
-                }
-            });
-        } catch (error) {
-            console.log('Could not modify map colors:', error);
-        }
-
-        // Get user's location after map is ready
         getUserLocation();
     });
 
