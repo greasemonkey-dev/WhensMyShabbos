@@ -82,8 +82,17 @@ header h1 {
 #map {
     flex: 1;
     width: 100%;
+    min-height: 0; /* Fix for flex children */
     position: relative;
     background: #1a1a2e;
+}
+
+/* Force the map to fill the entire container */
+.maplibregl-map,
+.mapboxgl-map {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: #1a1a2e !important;
 }
 
 /* Handle the map canvas itself - FORCE dark background everywhere */
@@ -92,17 +101,15 @@ header h1 {
 .maplibregl-canvas-container canvas,
 .mapboxgl-canvas-container canvas {
     background-color: #1a1a2e !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .maplibregl-canvas,
 .mapboxgl-canvas {
     background-color: #1a1a2e !important;
-}
-
-/* Target the map wrapper */
-.maplibregl-map,
-.mapboxgl-map {
-    background-color: #1a1a2e !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 /* Completely hide MapTiler branding and controls that create white banners */
