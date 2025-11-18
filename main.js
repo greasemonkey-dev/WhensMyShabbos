@@ -1,5 +1,5 @@
 // MapTiler API Key - Replace with your own key from https://cloud.maptiler.com/
-const MAPTILER_API_KEY = 'YOUR_MAPTILER_API_KEY_HERE';
+const MAPTILER_API_KEY = 'IOegHViiczZRkx2lZpbB';
 
 // Initialize map
 let map;
@@ -13,17 +13,22 @@ async function init() {
         return;
     }
 
-    // Initialize map with default view
+    // Initialize map with world view for dramatic zoom effect
     map = new maptilersdk.Map({
         container: 'map',
         style: maptilersdk.MapStyle.STREETS,
-        center: [-74.006, 40.7128], // Default to NYC
-        zoom: 12,
-        apiKey: MAPTILER_API_KEY
+        center: [0, 20], // Center of world
+        zoom: 1.5, // World view
+        apiKey: MAPTILER_API_KEY,
+        pitch: 0, // Start flat
+        bearing: 0
     });
 
-    // Get user's location
-    getUserLocation();
+    // Wait for map to load before getting user location
+    map.on('load', () => {
+        // Get user's location after map is ready
+        getUserLocation();
+    });
 
     // Add click event to map
     map.on('click', async (e) => {
@@ -40,14 +45,24 @@ function getUserLocation() {
             async (position) => {
                 const { latitude, longitude } = position.coords;
 
-                // Center map on user location
+                // Beautiful smooth zoom animation from world view to user location
                 map.flyTo({
                     center: [longitude, latitude],
-                    zoom: 13
+                    zoom: 14,
+                    speed: 0.8, // Slower, more dramatic zoom
+                    curve: 1.5, // More curved path for cinematic effect
+                    duration: 3500, // 3.5 seconds for smooth animation
+                    essential: true,
+                    pitch: 45, // Add tilt for 3D effect
+                    bearing: 0
                 });
 
-                // Add marker and get Shabbos times
-                updateMarker(latitude, longitude);
+                // Wait a moment before adding marker for better visual flow
+                setTimeout(() => {
+                    updateMarker(latitude, longitude);
+                }, 2000);
+
+                // Fetch Shabbos times while animation is happening
                 await updateShabbosInfo(latitude, longitude);
             },
             (error) => {
@@ -66,7 +81,18 @@ function updateMarker(lat, lng) {
         userMarker.remove();
     }
 
-    userMarker = new maptilersdk.Marker({ color: '#667eea' })
+    // Create a custom pulsing marker element
+    const markerElement = document.createElement('div');
+    markerElement.className = 'custom-marker';
+    markerElement.innerHTML = `
+        <div class="marker-pulse"></div>
+        <div class="marker-pin">📍</div>
+    `;
+
+    userMarker = new maptilersdk.Marker({
+        element: markerElement,
+        anchor: 'bottom'
+    })
         .setLngLat([lng, lat])
         .addTo(map);
 }
@@ -86,7 +112,7 @@ async function updateShabbosInfo(lat, lng) {
         displayShabbosInfo(locationName, shabbosData);
     } catch (error) {
         console.error('Error fetching Shabbos info:', error);
-        showError('Unable to fetch Shabbos times. Please try again.');
+        showError(`Unable to fetch Shabbos times: ${error.message}. Please check the browser console for details.`);
     }
 }
 
@@ -110,14 +136,43 @@ async function getLocationName(lat, lng) {
 
 // Get Shabbos times from HebCal API
 async function getShabbosTimesFromHebCal(lat, lng) {
-    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}&tzid=auto`;
+    // Don't use tzid=auto - HebCal will auto-detect timezone from coordinates
+    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}`;
 
-    const response = await fetch(url);
+    console.log('Fetching Shabbos times from:', url);
+
+    let response;
+    try {
+        response = await fetch(url, {
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+    } catch (fetchError) {
+        console.error('Fetch error (likely CORS or network issue):', fetchError);
+        throw new Error(`Network error fetching Shabbos times. This may be due to CORS restrictions. Try opening the app via a web server (npm start) instead of file://.`);
+    }
+
+    console.log('Response status:', response.status, response.statusText);
+
     if (!response.ok) {
-        throw new Error('Failed to fetch Shabbos times');
+        const errorText = await response.text();
+        console.error('HebCal API error:', errorText);
+        throw new Error(`Failed to fetch Shabbos times: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('HebCal API response:', data);
+
+    // Validate response has items
+    if (!data.items || !Array.isArray(data.items)) {
+        throw new Error('Invalid response from HebCal API: missing items array');
+    }
+
+    if (data.items.length === 0) {
+        throw new Error('No Shabbos times found for this location');
+    }
 
     // Parse the response
     let candleLighting = null;
