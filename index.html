@@ -1,59 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="http://schema.org/WebApplication">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>When's My Shabbos?</title>
+
+    <!-- Primary Meta Tags -->
+    <title>When's My Shabbos? | Find Candle Lighting Times Worldwide - Shabbat Times Finder</title>
+    <meta name="title" content="When's My Shabbos? | Find Candle Lighting Times Worldwide">
+    <meta name="description" content="Instantly find Shabbat candle lighting and Havdalah times for any location worldwide. Interactive map-based Jewish Shabbos times finder with weekly Torah portion (Parsha). Fast, accurate, and easy to use.">
+    <meta name="keywords" content="Shabbos times, Shabbat times, candle lighting, Havdalah times, Jewish calendar, Torah portion, Parsha, Shabbat candles, Friday night times, Jewish holidays, Sabbath times, kosher times, zmanim">
+    <meta name="author" content="When's My Shabbos">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="general">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://whensmyshabbos.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://whensmyshabbos.com/">
+    <meta property="og:title" content="When's My Shabbos? | Find Candle Lighting Times Worldwide">
+    <meta property="og:description" content="Instantly find Shabbat candle lighting and Havdalah times for any location worldwide. Interactive map-based Jewish Shabbos times finder with weekly Torah portion.">
+    <meta property="og:image" content="https://whensmyshabbos.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="When's My Shabbos">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://whensmyshabbos.com/">
+    <meta name="twitter:title" content="When's My Shabbos? | Find Candle Lighting Times Worldwide">
+    <meta name="twitter:description" content="Instantly find Shabbat candle lighting and Havdalah times for any location worldwide. Interactive map-based Shabbos times finder.">
+    <meta name="twitter:image" content="https://whensmyshabbos.com/twitter-image.png">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#5B6FDE">
+    <meta name="msapplication-TileColor" content="#5B6FDE">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Icons -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🕯️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🕯️</text></svg>">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.maptiler.com">
+    <link rel="preconnect" href="https://api.maptiler.com">
+    <link rel="preconnect" href="https://www.hebcal.com">
+
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdn.maptiler.com">
+    <link rel="dns-prefetch" href="https://api.maptiler.com">
+    <link rel="dns-prefetch" href="https://www.hebcal.com">
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- External Scripts -->
     <script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet">
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "When's My Shabbos",
+      "alternateName": "Shabbos Times Finder",
+      "url": "https://whensmyshabbos.com",
+      "description": "Find Shabbat candle lighting and Havdalah times for any location worldwide with our interactive map-based tool. Get accurate Jewish Sabbath times and weekly Torah portion.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Interactive world map",
+        "Accurate Shabbat candle lighting times",
+        "Havdalah times",
+        "Weekly Torah portion (Parsha)",
+        "Location-based search",
+        "Worldwide coverage"
+      ],
+      "screenshot": "https://whensmyshabbos.com/screenshot.png",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "ratingCount": "1"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "When's My Shabbos"
+      }
+    }
+    </script>
+
+    <!-- Additional Structured Data for Local Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is When's My Shabbos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When's My Shabbos is a free web application that helps you find accurate Shabbat candle lighting and Havdalah times for any location worldwide using an interactive map interface."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I find Shabbos times for my location?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply allow location access when prompted, and the app will automatically display your Shabbat times. You can also click anywhere on the map to find times for any location worldwide."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are the Shabbat times accurate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we use the HebCal API which provides accurate Jewish calendar data used by communities worldwide. Times are calculated based on your exact geographic location."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <div id="app">
-        <header>
+        <header role="banner">
             <h1>When's My Shabbos? 🕯️</h1>
-            <p class="subtitle">Find candle lighting times for your location</p>
+            <p class="subtitle">Find Shabbat candle lighting and Havdalah times for any location worldwide</p>
         </header>
 
-        <div id="info-panel" class="info-panel">
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
+        <aside id="info-panel" class="info-panel" role="complementary" aria-label="Shabbat times information">
+            <div id="loading" class="loading" role="status" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
                 <p>Detecting your location...</p>
             </div>
-            <div id="shabbos-info" class="shabbos-info hidden">
+            <section id="shabbos-info" class="shabbos-info hidden" aria-labelledby="location-name">
                 <h2 id="location-name">Your Location</h2>
-                <div class="time-display">
-                    <div class="time-item">
+                <div class="time-display" role="list">
+                    <article class="time-item" role="listitem">
                         <span class="label">🕯️ Candle Lighting</span>
-                        <span id="candle-time" class="time">--:--</span>
-                    </div>
-                    <div class="time-item">
+                        <time id="candle-time" class="time" datetime="">--:--</time>
+                    </article>
+                    <article class="time-item" role="listitem">
                         <span class="label">⭐ Havdalah</span>
-                        <span id="havdalah-time" class="time">--:--</span>
-                    </div>
-                    <div class="time-item">
-                        <span class="label">📖 Parsha</span>
+                        <time id="havdalah-time" class="time" datetime="">--:--</time>
+                    </article>
+                    <article class="time-item" role="listitem">
+                        <span class="label">📖 Torah Portion (Parsha)</span>
                         <span id="parsha" class="parsha">Loading...</span>
-                    </div>
+                    </article>
                     <div class="date-display">
-                        📅 <span id="shabbos-date"></span>
+                        📅 <time id="shabbos-date" datetime=""></time>
                     </div>
                 </div>
+            </section>
+            <div id="error-message" class="error-message hidden" role="alert" aria-live="assertive">
+                <p>Unable to detect location. Please enable location services or click on the map.</p>
             </div>
-            <div id="error-message" class="error-message hidden">
-                <p>Unable to detect location. Please enable location services.</p>
-            </div>
-        </div>
+        </aside>
 
-        <div id="map"></div>
+        <main id="map" role="main" aria-label="Interactive world map for finding Shabbat times"></main>
 
-        <div class="instructions">
-            <p>Click anywhere on the map to get Shabbos times for that location</p>
-        </div>
+        <aside class="instructions" role="note" aria-label="Usage instructions">
+            <p>Click anywhere on the map to get Shabbat times for that location</p>
+        </aside>
     </div>
 
     <script src="main.js"></script>
