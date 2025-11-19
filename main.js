@@ -287,24 +287,35 @@ function displayShabbosInfo(locationName, shabbosData) {
 
     document.getElementById('location-name').textContent = locationName;
 
+    // Candle lighting time with datetime attribute for SEO
+    const candleTimeElement = document.getElementById('candle-time');
     if (shabbosData.candleLighting) {
-        document.getElementById('candle-time').textContent = formatTime(shabbosData.candleLighting);
+        candleTimeElement.textContent = formatTime(shabbosData.candleLighting);
+        candleTimeElement.setAttribute('datetime', shabbosData.candleLighting.toISOString());
     } else {
-        document.getElementById('candle-time').textContent = 'N/A';
+        candleTimeElement.textContent = 'N/A';
+        candleTimeElement.removeAttribute('datetime');
     }
 
+    // Havdalah time with datetime attribute for SEO
+    const havdalahTimeElement = document.getElementById('havdalah-time');
     if (shabbosData.havdalah) {
-        document.getElementById('havdalah-time').textContent = formatTime(shabbosData.havdalah);
+        havdalahTimeElement.textContent = formatTime(shabbosData.havdalah);
+        havdalahTimeElement.setAttribute('datetime', shabbosData.havdalah.toISOString());
     } else {
-        document.getElementById('havdalah-time').textContent = 'N/A';
+        havdalahTimeElement.textContent = 'N/A';
+        havdalahTimeElement.removeAttribute('datetime');
     }
 
+    // Parsha (Torah portion)
     if (shabbosData.parsha) {
         document.getElementById('parsha').textContent = shabbosData.parsha;
     } else {
         document.getElementById('parsha').textContent = 'N/A';
     }
 
+    // Shabbos date with datetime attribute for SEO
+    const shabbosDateElement = document.getElementById('shabbos-date');
     if (shabbosData.shabbosDate) {
         const dateStr = shabbosData.shabbosDate.toLocaleDateString('en-US', {
             weekday: 'long',
@@ -312,9 +323,11 @@ function displayShabbosInfo(locationName, shabbosData) {
             month: 'long',
             day: 'numeric'
         });
-        document.getElementById('shabbos-date').textContent = dateStr;
+        shabbosDateElement.textContent = dateStr;
+        shabbosDateElement.setAttribute('datetime', shabbosData.shabbosDate.toISOString().split('T')[0]);
     } else {
-        document.getElementById('shabbos-date').textContent = '';
+        shabbosDateElement.textContent = '';
+        shabbosDateElement.removeAttribute('datetime');
     }
 }
 
