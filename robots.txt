@@ -1,4 +1,4 @@
-# robots.txt for https://whensmyshabbos.com/
+# robots.txt for https://greasemonkey-dev.github.io/WhensMyShabbos/
 
 User-agent: *
 Allow: /
@@ -8,7 +8,7 @@ Disallow: /package.json
 Disallow: /package-lock.json
 
 # Sitemaps
-Sitemap: https://whensmyshabbos.com/sitemap.xml
+Sitemap: https://greasemonkey-dev.github.io/WhensMyShabbos/sitemap.xml
 
 # Crawl-delay (be nice to bots)
 Crawl-delay: 1
