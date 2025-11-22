@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120">
+  <!-- Location pin shape -->
+  <path d="M50 0C22.4 0 0 22.4 0 50c0 35 50 70 50 70s50-35 50-70C100 22.4 77.6 0 50 0z" fill="#333333"/>
+  <!-- White circle background -->
+  <circle cx="50" cy="45" r="32" fill="#ffffff"/>
+  <!-- Left candle -->
+  <rect x="36" y="35" width="10" height="35" rx="2" fill="#333333"/>
+  <!-- Right candle -->
+  <rect x="54" y="35" width="10" height="35" rx="2" fill="#333333"/>
+  <!-- Left flame -->
+  <path d="M41 35c0 0-5-8-5-12c0-4 2.5-8 5-8s5 4 5 8c0 4-5 12-5 12z" fill="#333333"/>
+  <!-- Right flame -->
+  <path d="M59 35c0 0-5-8-5-12c0-4 2.5-8 5-8s5 4 5 8c0 4-5 12-5 12z" fill="#333333"/>
+</svg>
