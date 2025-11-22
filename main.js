@@ -123,7 +123,7 @@ function updateMarker(lat, lng) {
     markerElement.className = 'custom-marker';
     markerElement.innerHTML = `
         <div class="marker-pulse"></div>
-        <div class="marker-pin">📍</div>
+        <img class="marker-pin" src="marker-icon.svg" alt="Location marker" />
     `;
 
     userMarker = new maptilersdk.Marker({
