@@ -75,12 +75,31 @@ async function init() {
     });
 }
 
+// Hide header with smooth animation
+function hideHeader() {
+    const header = document.querySelector('header');
+    const infoPanel = document.getElementById('info-panel');
+
+    if (header) {
+        header.classList.add('header-hidden');
+    }
+    if (infoPanel) {
+        infoPanel.classList.add('header-collapsed');
+    }
+}
+
 // Get user's current location
 function getUserLocation() {
     if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const { latitude, longitude } = position.coords;
+
+                // Hide the header as the map starts zooming in
+                // Small delay to let user see the initial state
+                setTimeout(() => {
+                    hideHeader();
+                }, 500);
 
                 // Beautiful smooth zoom animation from world view to user location
                 map.flyTo({
