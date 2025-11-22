@@ -179,15 +179,16 @@ header h1 {
     position: absolute;
     top: 170px;
     left: 40px;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    /* Glassmorphism - transparent and blurry */
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     padding: 2.5rem;
     border-radius: 28px;
     box-shadow:
-        0 20px 60px rgba(0,0,0,0.12),
-        0 8px 24px rgba(0,0,0,0.08),
-        inset 0 1px 0 rgba(255,255,255,1);
+        0 12px 40px rgba(0,0,0,0.1),
+        0 4px 16px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.5);
     z-index: 1000;
     min-width: 380px;
     max-width: 440px;
@@ -338,12 +339,13 @@ header h1 {
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
-    background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+    /* Lighter transparent background */
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 18px;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1.5px solid rgba(91, 111, 222, 0.08);
     animation: slideInUp 0.6s ease-out backwards;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     position: relative;
     overflow: hidden;
     cursor: pointer;
@@ -424,9 +426,9 @@ header h1 {
 }
 
 .time-item:first-child {
-    background: linear-gradient(135deg, #F0F4FF 0%, #FDFEFF 100%);
-    border: 1.5px solid rgba(91, 111, 222, 0.2);
-    box-shadow: 0 4px 16px rgba(91, 111, 222, 0.08);
+    background: rgba(240, 244, 255, 0.6);
+    border: 1.5px solid rgba(91, 111, 222, 0.15);
+    box-shadow: 0 4px 12px rgba(91, 111, 222, 0.06);
 }
 
 .time-item:first-child:hover {
@@ -473,10 +475,10 @@ header h1 {
     font-size: 0.9375rem;
     font-weight: 500;
     animation: slideIn 0.8s ease-out 0.5s backwards;
-    background: linear-gradient(135deg, #FAFBFC 0%, #FFFFFF 100%);
+    background: rgba(255, 255, 255, 0.4);
     padding: 1.125rem 1.5rem;
     border-radius: 16px;
-    border: 1.5px solid rgba(91, 111, 222, 0.08);
+    border: 1.5px solid rgba(91, 111, 222, 0.06);
     box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     letter-spacing: 0.2px;
     line-height: 1.5;
