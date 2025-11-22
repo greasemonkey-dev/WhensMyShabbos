@@ -512,7 +512,6 @@ header h1 {
     height: 60px;
     z-index: 2;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-    animation: markerBounce 2s ease-in-out infinite;
 }
 
 @keyframes markerBounce {
