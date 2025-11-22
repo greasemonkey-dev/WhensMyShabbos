@@ -123,7 +123,22 @@ function updateMarker(lat, lng) {
     markerElement.className = 'custom-marker';
     markerElement.innerHTML = `
         <div class="marker-pulse"></div>
-        <img class="marker-pin" src="marker-icon.svg" alt="Location marker" />
+        <div class="marker-pin">
+            <div class="marker-blur-bg"></div>
+            <svg class="marker-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="50" height="60">
+                <defs>
+                    <mask id="pinMask">
+                        <path d="M50 0C22.4 0 0 22.4 0 50c0 35 50 70 50 70s50-35 50-70C100 22.4 77.6 0 50 0z" fill="white"/>
+                        <circle cx="50" cy="42" r="28" fill="black"/>
+                    </mask>
+                </defs>
+                <path d="M50 0C22.4 0 0 22.4 0 50c0 35 50 70 50 70s50-35 50-70C100 22.4 77.6 0 50 0z" fill="#333333" mask="url(#pinMask)"/>
+                <rect x="35" y="38" width="12" height="30" rx="1" fill="#333333"/>
+                <rect x="53" y="38" width="12" height="30" rx="1" fill="#333333"/>
+                <path d="M41 38 Q41 28 36 22 Q41 18 41 22 Q46 28 41 38 Z" fill="#333333"/>
+                <path d="M59 38 Q59 28 54 22 Q59 18 59 22 Q64 28 59 38 Z" fill="#333333"/>
+            </svg>
+        </div>
     `;
 
     userMarker = new maptilersdk.Marker({
