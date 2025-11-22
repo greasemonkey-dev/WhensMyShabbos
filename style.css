@@ -31,16 +31,20 @@ header {
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     /* Smooth transition for hiding animation */
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    max-height: 200px; /* Set a max-height for animation */
+    transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 0.8s cubic-bezier(0.4, 0, 0.2, 1),
                 opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                margin-top 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                border-bottom 0.4s ease;
 }
 
-/* Header hidden state - slides up and fades out */
+/* Header hidden state - collapses completely */
 header.header-hidden {
-    transform: translateY(-100%);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     opacity: 0;
-    margin-top: -1px; /* Collapse space */
+    border-bottom: 0 solid transparent;
     pointer-events: none;
 }
 
