@@ -1,0 +1,21 @@
+{
+  "default": 20,
+  "locations": [
+    {
+      "names": ["Jerusalem", "ירושלים", "Yerushalayim"],
+      "minutes": 40
+    },
+    {
+      "names": ["Haifa", "חיפה"],
+      "minutes": 30
+    },
+    {
+      "names": ["Zikhron Ya'akov", "זכרון יעקב", "Zikhron"],
+      "minutes": 30
+    },
+    {
+      "names": ["Elad", "אלעד"],
+      "minutes": 30
+    }
+  ]
+}
