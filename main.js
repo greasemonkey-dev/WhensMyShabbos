@@ -273,13 +273,29 @@ async function getLocationName(lat, lng) {
 
             // Get place/city name from context
             if (feature.context) {
-                const place = feature.context.find(c => c.id && c.id.startsWith('place'));
+                // Look for city/place - could be 'place', 'municipality', or 'locality'
+                const place = feature.context.find(c => c.id && (
+                    c.id.startsWith('place') ||
+                    c.id.startsWith('municipality') ||
+                    c.id.startsWith('locality')
+                ));
                 const region = feature.context.find(c => c.id && c.id.startsWith('region'));
                 const country = feature.context.find(c => c.id && c.id.startsWith('country'));
 
                 if (place) locationParts.push(place.text);
                 if (region) locationParts.push(region.text);
                 if (country) locationParts.push(country.text);
+            }
+
+            // If no place found in context, check the feature itself
+            if (locationParts.length === 0 || !locationParts[0]) {
+                // The feature.text often contains the city/place name
+                if (feature.text && feature.place_type &&
+                    (feature.place_type.includes('place') ||
+                     feature.place_type.includes('municipality') ||
+                     feature.place_type.includes('locality'))) {
+                    locationParts.unshift(feature.text);
+                }
             }
 
             // If we got structured data, return it
