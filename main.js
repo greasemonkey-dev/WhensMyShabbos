@@ -275,7 +275,8 @@ async function getLocationName(lat, lng) {
 // Get Shabbos times from HebCal API
 async function getShabbosTimesFromHebCal(lat, lng) {
     // Don't use tzid=auto - HebCal will auto-detect timezone from coordinates
-    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}`;
+    // b=20 sets candle lighting to 20 minutes before sunset
+    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}&b=20`;
 
     console.log('Fetching Shabbos times from:', url);
 
