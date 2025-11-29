@@ -89,46 +89,88 @@ function hideHeader() {
 }
 
 // Get user's current location
-function getUserLocation() {
-    if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const { latitude, longitude } = position.coords;
-
-                // Hide the header as the map starts zooming in
-                // Small delay to let user see the initial state
-                setTimeout(() => {
-                    hideHeader();
-                }, 500);
-
-                // Beautiful smooth zoom animation from world view to user location
-                map.flyTo({
-                    center: [longitude, latitude],
-                    zoom: 14,
-                    speed: 0.8, // Slower, more dramatic zoom
-                    curve: 1.5, // More curved path for cinematic effect
-                    duration: 3500, // 3.5 seconds for smooth animation
-                    essential: true,
-                    pitch: 45, // Add tilt for 3D effect
-                    bearing: 0
-                });
-
-                // Wait a moment before adding marker for better visual flow
-                setTimeout(() => {
-                    updateMarker(latitude, longitude);
-                }, 2000);
-
-                // Fetch Shabbos times while animation is happening
-                await updateShabbosInfo(latitude, longitude);
-            },
-            (error) => {
-                console.error('Error getting location:', error);
-                showError('Unable to detect location. Please click on the map to select a location.');
-            }
-        );
-    } else {
+async function getUserLocation() {
+    if (!('geolocation' in navigator)) {
         showError('Geolocation is not supported by your browser. Please click on the map to select a location.');
+        return;
     }
+
+    // Check if we're on HTTPS (required for geolocation in most browsers)
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        console.warn('Geolocation may not work over HTTP. HTTPS is recommended.');
+    }
+
+    // Check permission status first (if Permissions API is available)
+    if ('permissions' in navigator) {
+        try {
+            const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+            if (permissionStatus.state === 'denied') {
+                showError('Location access was previously denied. Please enable location in your browser settings, or click on the map to select a location.');
+                return;
+            }
+        } catch (e) {
+            // Permissions API not fully supported, continue with geolocation request
+            console.log('Permissions API check failed, proceeding with geolocation request');
+        }
+    }
+
+    // Request location with timeout and options
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude } = position.coords;
+
+            // Hide the header as the map starts zooming in
+            // Small delay to let user see the initial state
+            setTimeout(() => {
+                hideHeader();
+            }, 500);
+
+            // Beautiful smooth zoom animation from world view to user location
+            map.flyTo({
+                center: [longitude, latitude],
+                zoom: 14,
+                speed: 0.8, // Slower, more dramatic zoom
+                curve: 1.5, // More curved path for cinematic effect
+                duration: 3500, // 3.5 seconds for smooth animation
+                essential: true,
+                pitch: 45, // Add tilt for 3D effect
+                bearing: 0
+            });
+
+            // Wait a moment before adding marker for better visual flow
+            setTimeout(() => {
+                updateMarker(latitude, longitude);
+            }, 2000);
+
+            // Fetch Shabbos times while animation is happening
+            await updateShabbosInfo(latitude, longitude);
+        },
+        (error) => {
+            console.error('Error getting location:', error);
+
+            // Provide specific error messages based on error code
+            let errorMessage;
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = 'Location access denied. Please enable location permissions in your browser settings, or click on the map to select a location.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = 'Unable to determine your location. Please check your device\'s location settings, or click on the map to select a location.';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = 'Location request timed out. Please try refreshing the page, or click on the map to select a location.';
+                    break;
+                default:
+                    errorMessage = 'Unable to detect location. Please click on the map to select a location.';
+            }
+            showError(errorMessage);
+        },
+        {
+            enableHighAccuracy: false, // Faster response, sufficient for city-level accuracy
+            timeout: 10000, // 10 second timeout to prevent hanging
+            maximumAge: 300000 // Accept cached position up to 5 minutes old
+        }
+    );
 }
 
 // Update or create marker on map
