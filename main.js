@@ -18,6 +18,48 @@ console.error = function(...args) {
 let map;
 let userMarker;
 
+// Minhagim configuration cache
+let minhagimConfig = null;
+
+// Load minhagim configuration from JSON file
+async function loadMinhagimConfig() {
+    if (minhagimConfig) return minhagimConfig;
+
+    try {
+        const response = await fetch('minhagim.json');
+        minhagimConfig = await response.json();
+        console.log('Loaded minhagim config:', minhagimConfig);
+        return minhagimConfig;
+    } catch (error) {
+        console.warn('Could not load minhagim.json, using defaults:', error);
+        minhagimConfig = { default: 20, locations: [] };
+        return minhagimConfig;
+    }
+}
+
+// Get candle lighting minutes based on location name
+async function getCandleLightingMinutes(locationName) {
+    const config = await loadMinhagimConfig();
+
+    if (!locationName || !config.locations) {
+        return config.default;
+    }
+
+    // Search for a matching location (case-insensitive partial match)
+    const locationLower = locationName.toLowerCase();
+
+    for (const location of config.locations) {
+        for (const name of location.names) {
+            if (locationLower.includes(name.toLowerCase())) {
+                console.log(`Found minhag match: "${name}" in "${locationName}" → ${location.minutes} minutes`);
+                return location.minutes;
+            }
+        }
+    }
+
+    return config.default;
+}
+
 // Initialize the application
 async function init() {
     // Check if API key is set
@@ -203,8 +245,8 @@ async function updateShabbosInfo(lat, lng) {
         // Get location name using reverse geocoding
         const locationName = await getLocationName(lat, lng);
 
-        // Get Shabbos times from HebCal API
-        const shabbosData = await getShabbosTimesFromHebCal(lat, lng);
+        // Get Shabbos times from HebCal API (pass locationName for minhag lookup)
+        const shabbosData = await getShabbosTimesFromHebCal(lat, lng, locationName);
 
         // Display the information
         displayShabbosInfo(locationName, shabbosData);
@@ -273,10 +315,12 @@ async function getLocationName(lat, lng) {
 }
 
 // Get Shabbos times from HebCal API
-async function getShabbosTimesFromHebCal(lat, lng) {
+async function getShabbosTimesFromHebCal(lat, lng, locationName) {
+    // Get candle lighting minutes based on location minhag
+    const candleLightingMinutes = await getCandleLightingMinutes(locationName);
+
     // Don't use tzid=auto - HebCal will auto-detect timezone from coordinates
-    // b=20 sets candle lighting to 20 minutes before sunset
-    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}&b=20`;
+    const url = `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lng}&b=${candleLightingMinutes}`;
 
     console.log('Fetching Shabbos times from:', url);
 
