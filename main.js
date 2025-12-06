@@ -1,6 +1,13 @@
 // MapTiler API Key - Replace with your own key from https://cloud.maptiler.com/
 const MAPTILER_API_KEY = 'IOegHViiczZRkx2lZpbB';
 
+// Google Analytics helper function
+function trackEvent(eventName, params = {}) {
+    if (typeof gtag === 'function') {
+        gtag('event', eventName, params);
+    }
+}
+
 // Suppress MapLibre warnings caused by ad blockers
 const originalConsoleError = console.error;
 console.error = function(...args) {
@@ -112,6 +119,10 @@ async function init() {
     // Add click event to map
     map.on('click', async (e) => {
         const { lng, lat } = e.lngLat;
+        trackEvent('map_click', {
+            latitude: lat.toFixed(4),
+            longitude: lng.toFixed(4)
+        });
         await updateShabbosInfo(lat, lng);
         updateMarker(lat, lng);
     });
@@ -160,6 +171,10 @@ async function getUserLocation() {
     navigator.geolocation.getCurrentPosition(
         async (position) => {
             const { latitude, longitude } = position.coords;
+            trackEvent('geolocation_success', {
+                latitude: latitude.toFixed(4),
+                longitude: longitude.toFixed(4)
+            });
 
             // Hide the header as the map starts zooming in
             // Small delay to let user see the initial state
@@ -189,6 +204,10 @@ async function getUserLocation() {
         },
         (error) => {
             console.error('Error getting location:', error);
+            trackEvent('geolocation_error', {
+                error_code: error.code,
+                error_message: error.message
+            });
 
             // Provide specific error messages based on error code
             let errorMessage;
@@ -407,6 +426,11 @@ function displayShabbosInfo(locationName, shabbosData) {
     const shabbosInfo = document.getElementById('shabbos-info');
     shabbosInfo.classList.remove('hidden');
 
+    trackEvent('shabbos_times_loaded', {
+        location: locationName,
+        parsha: shabbosData.parsha || 'N/A'
+    });
+
     document.getElementById('location-name').textContent = locationName;
 
     // Candle lighting time with datetime attribute for SEO
@@ -473,6 +497,10 @@ function showLoading() {
 function showError(message) {
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('shabbos-info').classList.add('hidden');
+
+    trackEvent('error', {
+        error_message: message
+    });
 
     const errorElement = document.getElementById('error-message');
     errorElement.querySelector('p').textContent = message;
