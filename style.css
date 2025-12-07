@@ -664,3 +664,112 @@ header h1 {
         height: 48px;
     }
 }
+
+/* Language Switcher */
+.lang-switcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(91, 111, 222, 0.3);
+    color: #5B6FDE;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    z-index: 1001;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lang-switcher:hover {
+    transform: scale(1.1);
+    background: #5B6FDE;
+    color: white;
+    border-color: #5B6FDE;
+    box-shadow: 0 8px 24px rgba(91, 111, 222, 0.3);
+}
+
+.lang-switcher:active {
+    transform: scale(1.05);
+}
+
+.lang-switcher:focus {
+    outline: 2px solid #5B6FDE;
+    outline-offset: 3px;
+}
+
+/* RTL Support */
+html[dir="rtl"] .info-panel {
+    left: auto;
+    right: 40px;
+    animation: slideInRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+html[dir="rtl"] .shabbos-info h2::after {
+    left: auto;
+    right: 0;
+}
+
+html[dir="rtl"] .time-item::before {
+    left: auto;
+    right: 0;
+    border-radius: 0 18px 18px 0;
+}
+
+html[dir="rtl"] .time-item:hover {
+    transform: translateX(-6px) translateY(-2px);
+}
+
+html[dir="rtl"] .time-item:active {
+    transform: translateX(-4px) translateY(0px);
+}
+
+html[dir="rtl"] .lang-switcher {
+    right: auto;
+    left: 20px;
+}
+
+html[dir="rtl"] header h1 {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: 0;
+}
+
+/* RTL responsive adjustments */
+@media (max-width: 768px) {
+    html[dir="rtl"] .info-panel {
+        left: 12px;
+        right: 12px;
+    }
+
+    .lang-switcher {
+        bottom: 16px;
+        right: 16px;
+        width: 42px;
+        height: 42px;
+        font-size: 0.8125rem;
+    }
+
+    html[dir="rtl"] .lang-switcher {
+        right: auto;
+        left: 16px;
+    }
+}

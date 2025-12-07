@@ -69,9 +69,26 @@ async function getCandleLightingMinutes(locationName) {
 
 // Initialize the application
 async function init() {
+    // Initialize language system
+    if (window.i18n) {
+        window.i18n.initLanguage();
+        window.i18n.updatePageLanguage();
+    }
+
+    // Set up language switcher
+    const langSwitcher = document.getElementById('lang-switcher-btn');
+    if (langSwitcher) {
+        langSwitcher.addEventListener('click', () => {
+            const currentLang = window.i18n.getLanguage();
+            const newLang = currentLang === 'en' ? 'he' : 'en';
+            window.i18n.setLanguage(newLang);
+            trackEvent('language_switch', { language: newLang });
+        });
+    }
+
     // Check if API key is set
     if (MAPTILER_API_KEY === 'YOUR_MAPTILER_API_KEY_HERE') {
-        showError('Please set your MapTiler API key in main.js');
+        showError(window.i18n ? window.i18n.t('apiKeyError') : 'Please set your MapTiler API key in main.js');
         return;
     }
 
@@ -141,10 +158,15 @@ function hideHeader() {
     }
 }
 
+// Helper function to get translated string
+function t(key, replacements = {}) {
+    return window.i18n ? window.i18n.t(key, replacements) : key;
+}
+
 // Get user's current location
 async function getUserLocation() {
     if (!('geolocation' in navigator)) {
-        showError('Geolocation is not supported by your browser. Please click on the map to select a location.');
+        showError(t('geolocationNotSupported'));
         return;
     }
 
@@ -158,7 +180,7 @@ async function getUserLocation() {
         try {
             const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
             if (permissionStatus.state === 'denied') {
-                showError('Location access was previously denied. Please enable location in your browser settings, or click on the map to select a location.');
+                showError(t('locationDeniedPreviously'));
                 return;
             }
         } catch (e) {
@@ -210,21 +232,21 @@ async function getUserLocation() {
             });
 
             // Provide specific error messages based on error code
-            let errorMessage;
+            let errorKey;
             switch (error.code) {
                 case error.PERMISSION_DENIED:
-                    errorMessage = 'Location access denied. Please enable location permissions in your browser settings, or click on the map to select a location.';
+                    errorKey = 'locationDenied';
                     break;
                 case error.POSITION_UNAVAILABLE:
-                    errorMessage = 'Unable to determine your location. Please check your device\'s location settings, or click on the map to select a location.';
+                    errorKey = 'locationUnavailable';
                     break;
                 case error.TIMEOUT:
-                    errorMessage = 'Location request timed out. Please try refreshing the page, or click on the map to select a location.';
+                    errorKey = 'locationTimeout';
                     break;
                 default:
-                    errorMessage = 'Unable to detect location. Please click on the map to select a location.';
+                    errorKey = 'locationError';
             }
-            showError(errorMessage);
+            showError(t(errorKey));
         },
         {
             enableHighAccuracy: false, // Faster response, sufficient for city-level accuracy
@@ -271,7 +293,7 @@ async function updateShabbosInfo(lat, lng) {
         displayShabbosInfo(locationName, shabbosData);
     } catch (error) {
         console.error('Error fetching Shabbos info:', error);
-        showError(`Unable to fetch Shabbos times: ${error.message}. Please check the browser console for details.`);
+        showError(t('fetchError', { message: error.message }));
     }
 }
 
@@ -433,23 +455,27 @@ function displayShabbosInfo(locationName, shabbosData) {
 
     document.getElementById('location-name').textContent = locationName;
 
+    // Get locale for formatting
+    const locale = window.i18n ? window.i18n.getLocale() : 'en-US';
+    const notAvailable = t('notAvailable');
+
     // Candle lighting time with datetime attribute for SEO
     const candleTimeElement = document.getElementById('candle-time');
     if (shabbosData.candleLighting) {
-        candleTimeElement.textContent = formatTime(shabbosData.candleLighting);
+        candleTimeElement.textContent = formatTime(shabbosData.candleLighting, locale);
         candleTimeElement.setAttribute('datetime', shabbosData.candleLighting.toISOString());
     } else {
-        candleTimeElement.textContent = 'N/A';
+        candleTimeElement.textContent = notAvailable;
         candleTimeElement.removeAttribute('datetime');
     }
 
     // Havdalah time with datetime attribute for SEO
     const havdalahTimeElement = document.getElementById('havdalah-time');
     if (shabbosData.havdalah) {
-        havdalahTimeElement.textContent = formatTime(shabbosData.havdalah);
+        havdalahTimeElement.textContent = formatTime(shabbosData.havdalah, locale);
         havdalahTimeElement.setAttribute('datetime', shabbosData.havdalah.toISOString());
     } else {
-        havdalahTimeElement.textContent = 'N/A';
+        havdalahTimeElement.textContent = notAvailable;
         havdalahTimeElement.removeAttribute('datetime');
     }
 
@@ -457,13 +483,13 @@ function displayShabbosInfo(locationName, shabbosData) {
     if (shabbosData.parsha) {
         document.getElementById('parsha').textContent = shabbosData.parsha;
     } else {
-        document.getElementById('parsha').textContent = 'N/A';
+        document.getElementById('parsha').textContent = notAvailable;
     }
 
     // Shabbos date with datetime attribute for SEO
     const shabbosDateElement = document.getElementById('shabbos-date');
     if (shabbosData.shabbosDate) {
-        const dateStr = shabbosData.shabbosDate.toLocaleDateString('en-US', {
+        const dateStr = shabbosData.shabbosDate.toLocaleDateString(locale, {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -478,12 +504,14 @@ function displayShabbosInfo(locationName, shabbosData) {
 }
 
 // Format time for display
-function formatTime(date) {
-    return date.toLocaleTimeString('en-US', {
+function formatTime(date, locale = 'en-US') {
+    // Hebrew uses 24-hour format by default, but keep hour12 consistent
+    const options = {
         hour: 'numeric',
         minute: '2-digit',
-        hour12: true
-    });
+        hour12: locale === 'en-US'
+    };
+    return date.toLocaleTimeString(locale, options);
 }
 
 // Show loading state
