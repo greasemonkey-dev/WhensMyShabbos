@@ -500,6 +500,7 @@ header h1 {
 /* Havdalah Dropdown Styles */
 .havdalah-item {
     flex-direction: column;
+    align-items: stretch;
     padding: 0;
     overflow: visible;
 }
@@ -538,18 +539,15 @@ header h1 {
 .havdalah-dropdown {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.25s ease;
-    opacity: 0;
+    transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
 }
 
 .havdalah-item[aria-expanded="true"] .havdalah-dropdown {
     grid-template-rows: 1fr;
-    opacity: 1;
 }
 
-.havdalah-dropdown > div {
+.dropdown-content {
     overflow: hidden;
 }
 
