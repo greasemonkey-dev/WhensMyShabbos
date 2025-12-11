@@ -497,6 +497,116 @@ header h1 {
     line-height: 1.6;
 }
 
+/* Havdalah Dropdown Styles */
+.havdalah-item {
+    flex-direction: column;
+    padding: 0;
+    overflow: visible;
+}
+
+.havdalah-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.havdalah-time-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dropdown-arrow {
+    font-size: 0.625rem;
+    color: #5B6FDE;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.7;
+}
+
+.havdalah-item[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.havdalah-item:hover .dropdown-arrow {
+    opacity: 1;
+}
+
+.havdalah-dropdown {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.25s ease;
+    opacity: 0;
+    width: 100%;
+}
+
+.havdalah-item[aria-expanded="true"] .havdalah-dropdown {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+.havdalah-dropdown > div {
+    overflow: hidden;
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1.5rem;
+    background: rgba(91, 111, 222, 0.04);
+    border-top: 1px solid rgba(91, 111, 222, 0.08);
+    transition: background 0.25s ease;
+}
+
+.dropdown-item:first-child {
+    border-top: 1px solid rgba(91, 111, 222, 0.12);
+}
+
+.dropdown-item:last-child {
+    border-radius: 0 0 16px 16px;
+}
+
+.dropdown-item:hover {
+    background: rgba(91, 111, 222, 0.08);
+}
+
+.dropdown-item.rabeinu-tam {
+    background: linear-gradient(135deg, rgba(112, 86, 208, 0.06) 0%, rgba(229, 127, 233, 0.04) 100%);
+}
+
+.dropdown-item.rabeinu-tam:hover {
+    background: linear-gradient(135deg, rgba(112, 86, 208, 0.12) 0%, rgba(229, 127, 233, 0.08) 100%);
+}
+
+.dropdown-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    letter-spacing: 0.1px;
+}
+
+.dropdown-time {
+    font-size: 1.125rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #5B6FDE, #7056D0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-variant-numeric: tabular-nums;
+}
+
+.dropdown-item.rabeinu-tam .dropdown-time {
+    background: linear-gradient(135deg, #7056D0, #E57FE9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 
 /* Custom Marker Styles */
 .custom-marker {
@@ -646,6 +756,27 @@ header h1 {
         padding: 0.625rem 0.875rem;
         margin-top: 0.75rem;
         background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Havdalah dropdown mobile styles */
+    .havdalah-main {
+        padding: 0.625rem 0.875rem;
+    }
+
+    .dropdown-item {
+        padding: 0.625rem 0.875rem;
+    }
+
+    .dropdown-label {
+        font-size: 0.75rem;
+    }
+
+    .dropdown-time {
+        font-size: 0.9375rem;
+    }
+
+    .dropdown-arrow {
+        font-size: 0.5rem;
     }
 
     /* Custom marker smaller on mobile */

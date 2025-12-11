@@ -15,6 +15,8 @@ const translations = {
         candleLighting: "Candle Lighting",
         havdalah: "Havdalah",
         torahPortion: "Torah Portion (Parsha)",
+        havdalahStandard: "Standard (3 stars)",
+        havdalahRabeinuTam: "Rabeinu Tam (72 min)",
 
         // Placeholder
         yourLocation: "Your Location",
@@ -53,6 +55,8 @@ const translations = {
         candleLighting: "הדלקת נרות",
         havdalah: "הבדלה",
         torahPortion: "פרשת השבוע",
+        havdalahStandard: "רגיל (3 כוכבים)",
+        havdalahRabeinuTam: "רבינו תם (72 דק׳)",
 
         // Placeholder
         yourLocation: "המיקום שלך",
@@ -171,6 +175,15 @@ function updatePageLanguage() {
     labels.forEach((label, index) => {
         if (labelKeys[index]) {
             label.textContent = `${emojis[index]} ${t(labelKeys[index])}`;
+        }
+    });
+
+    // Update Havdalah dropdown labels
+    const dropdownLabels = document.querySelectorAll('.dropdown-label');
+    const dropdownKeys = ['havdalahStandard', 'havdalahRabeinuTam'];
+    dropdownLabels.forEach((label, index) => {
+        if (dropdownKeys[index]) {
+            label.textContent = t(dropdownKeys[index]);
         }
     });
 

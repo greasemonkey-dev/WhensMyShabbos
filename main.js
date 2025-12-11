@@ -143,6 +143,41 @@ async function init() {
         await updateShabbosInfo(lat, lng);
         updateMarker(lat, lng);
     });
+
+    // Set up Havdalah dropdown toggle
+    setupHavdalahDropdown();
+}
+
+// Set up Havdalah dropdown click handler
+function setupHavdalahDropdown() {
+    const havdalahContainer = document.getElementById('havdalah-container');
+    const havdalahMain = havdalahContainer?.querySelector('.havdalah-main');
+
+    if (havdalahMain) {
+        havdalahMain.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = havdalahContainer.getAttribute('aria-expanded') === 'true';
+            havdalahContainer.setAttribute('aria-expanded', !isExpanded);
+            trackEvent('havdalah_dropdown_toggle', { expanded: !isExpanded });
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (havdalahContainer && !havdalahContainer.contains(e.target)) {
+            havdalahContainer.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
+// Calculate Rabeinu Tam time (72 minutes after sunset)
+// Standard Havdalah is typically ~42 minutes after sunset (3 medium stars)
+// So Rabeinu Tam is approximately 30 minutes after standard Havdalah
+function calculateRabeinuTamTime(standardHavdalah) {
+    if (!standardHavdalah) return null;
+    const rabeinuTam = new Date(standardHavdalah.getTime());
+    rabeinuTam.setMinutes(rabeinuTam.getMinutes() + 30);
+    return rabeinuTam;
 }
 
 // Hide header with smooth animation
@@ -471,12 +506,43 @@ function displayShabbosInfo(locationName, shabbosData) {
 
     // Havdalah time with datetime attribute for SEO
     const havdalahTimeElement = document.getElementById('havdalah-time');
+    const havdalahStandardElement = document.getElementById('havdalah-standard');
+    const havdalahRabeinuTamElement = document.getElementById('havdalah-rabeinu-tam');
+
     if (shabbosData.havdalah) {
-        havdalahTimeElement.textContent = formatTime(shabbosData.havdalah, locale);
+        const standardTime = formatTime(shabbosData.havdalah, locale);
+        havdalahTimeElement.textContent = standardTime;
         havdalahTimeElement.setAttribute('datetime', shabbosData.havdalah.toISOString());
+
+        // Standard time in dropdown
+        if (havdalahStandardElement) {
+            havdalahStandardElement.textContent = standardTime;
+            havdalahStandardElement.setAttribute('datetime', shabbosData.havdalah.toISOString());
+        }
+
+        // Rabeinu Tam time (72 minutes after sunset)
+        const rabeinuTamTime = calculateRabeinuTamTime(shabbosData.havdalah);
+        if (havdalahRabeinuTamElement && rabeinuTamTime) {
+            havdalahRabeinuTamElement.textContent = formatTime(rabeinuTamTime, locale);
+            havdalahRabeinuTamElement.setAttribute('datetime', rabeinuTamTime.toISOString());
+        }
     } else {
         havdalahTimeElement.textContent = notAvailable;
         havdalahTimeElement.removeAttribute('datetime');
+        if (havdalahStandardElement) {
+            havdalahStandardElement.textContent = notAvailable;
+            havdalahStandardElement.removeAttribute('datetime');
+        }
+        if (havdalahRabeinuTamElement) {
+            havdalahRabeinuTamElement.textContent = notAvailable;
+            havdalahRabeinuTamElement.removeAttribute('datetime');
+        }
+    }
+
+    // Reset dropdown state when new location is loaded
+    const havdalahContainer = document.getElementById('havdalah-container');
+    if (havdalahContainer) {
+        havdalahContainer.setAttribute('aria-expanded', 'false');
     }
 
     // Parsha (Torah portion)
