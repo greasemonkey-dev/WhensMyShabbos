@@ -343,6 +343,13 @@ async function getLocationName(lat, lng) {
         if (data.features && data.features.length > 0) {
             const feature = data.features[0];
 
+            // Helper to check if text contains OSM tag patterns
+            const isOsmTag = (text) => {
+                if (!text) return true;
+                // Filter out OSM tag patterns like "addr:city", "name:en", etc.
+                return /^(addr|name|ref|alt_name|old_name|official_name):/.test(text);
+            };
+
             // Use context array to build clean location name without addresses/zip codes
             // Context contains structured data: place, region, country, etc.
             const locationParts = [];
@@ -354,19 +361,19 @@ async function getLocationName(lat, lng) {
                     c.id.startsWith('place') ||
                     c.id.startsWith('municipality') ||
                     c.id.startsWith('locality')
-                ));
-                const region = feature.context.find(c => c.id && c.id.startsWith('region'));
-                const country = feature.context.find(c => c.id && c.id.startsWith('country'));
+                ) && !isOsmTag(c.text));
+                const region = feature.context.find(c => c.id && c.id.startsWith('region') && !isOsmTag(c.text));
+                const country = feature.context.find(c => c.id && c.id.startsWith('country') && !isOsmTag(c.text));
 
-                if (place) locationParts.push(place.text);
-                if (region) locationParts.push(region.text);
-                if (country) locationParts.push(country.text);
+                if (place && place.text) locationParts.push(place.text);
+                if (region && region.text) locationParts.push(region.text);
+                if (country && country.text) locationParts.push(country.text);
             }
 
             // If no place found in context, check the feature itself
             if (locationParts.length === 0 || !locationParts[0]) {
                 // The feature.text often contains the city/place name
-                if (feature.text && feature.place_type &&
+                if (feature.text && !isOsmTag(feature.text) && feature.place_type &&
                     (feature.place_type.includes('place') ||
                      feature.place_type.includes('municipality') ||
                      feature.place_type.includes('locality'))) {
@@ -379,16 +386,18 @@ async function getLocationName(lat, lng) {
                 return locationParts.join(', ');
             }
 
-            // Fallback: parse place_name and remove anything that looks like a zip code
+            // Fallback: parse place_name and remove anything that looks like a zip code or OSM tag
             const placeName = feature.place_name || '';
             const parts = placeName.split(',').map(p => p.trim());
 
-            // Filter out parts that are just numbers (zip codes) or start with numbers
+            // Filter out parts that are just numbers (zip codes), start with numbers, or are OSM tags
             const filtered = parts.filter(part => {
                 // Remove if it's all digits (zip code)
                 if (/^\d+$/.test(part)) return false;
                 // Remove if it starts with digits followed by space (e.g., "12345 Street")
                 if (/^\d+\s/.test(part)) return false;
+                // Remove OSM tag patterns
+                if (isOsmTag(part)) return false;
                 return true;
             });
 
