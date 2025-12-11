@@ -179,9 +179,24 @@
                         <span class="label">🕯️ Candle Lighting</span>
                         <time id="candle-time" class="time" datetime="">--:--</time>
                     </article>
-                    <article class="time-item" role="listitem">
-                        <span class="label">⭐ Havdalah</span>
-                        <time id="havdalah-time" class="time" datetime="">--:--</time>
+                    <article class="time-item havdalah-item" role="listitem" id="havdalah-container" aria-expanded="false">
+                        <div class="havdalah-main">
+                            <span class="label">⭐ Havdalah</span>
+                            <div class="havdalah-time-wrapper">
+                                <time id="havdalah-time" class="time" datetime="">--:--</time>
+                                <span class="dropdown-arrow" aria-hidden="true">▼</span>
+                            </div>
+                        </div>
+                        <div class="havdalah-dropdown" id="havdalah-dropdown">
+                            <div class="dropdown-item">
+                                <span class="dropdown-label">Standard (3 stars)</span>
+                                <time id="havdalah-standard" class="dropdown-time" datetime="">--:--</time>
+                            </div>
+                            <div class="dropdown-item rabeinu-tam">
+                                <span class="dropdown-label">Rabeinu Tam (72 min)</span>
+                                <time id="havdalah-rabeinu-tam" class="dropdown-time" datetime="">--:--</time>
+                            </div>
+                        </div>
                     </article>
                     <article class="time-item" role="listitem">
                         <span class="label">📖 Torah Portion (Parsha)</span>
