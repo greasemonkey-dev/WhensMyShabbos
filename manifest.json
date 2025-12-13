@@ -27,9 +27,9 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshot.png",
+      "src": "/og-image.webp",
       "sizes": "1280x720",
-      "type": "image/png",
+      "type": "image/webp",
       "label": "When's My Shabbos main interface"
     }
   ],
