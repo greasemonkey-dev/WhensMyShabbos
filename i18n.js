@@ -3,6 +3,12 @@
 
 const translations = {
     en: {
+        // SEO Meta
+        metaTitle: "When's My Shabbos? | Find Candle Lighting Times Worldwide - Shabbat Times Finder",
+        metaDescription: "Instantly find Shabbat candle lighting and Havdalah times for any location worldwide. Interactive map-based Jewish Shabbos times finder with weekly Torah portion (Parsha). Fast, accurate, and easy to use.",
+        ogDescription: "Instantly find Shabbat candle lighting and Havdalah times for any location worldwide. Interactive map-based Jewish Shabbos times finder with weekly Torah portion.",
+        ogLocale: "en_US",
+
         // Header
         title: "When's My Shabbos?",
         subtitle: "Find Shabbat candle lighting and Havdalah times for any location worldwide",
@@ -43,6 +49,12 @@ const translations = {
         languageHe: "עברית"
     },
     he: {
+        // SEO Meta
+        metaTitle: "מתי השבת שלי? | זמני הדלקת נרות והבדלה לכל מיקום בעולם",
+        metaDescription: "מצאו זמני הדלקת נרות שבת והבדלה לכל מיקום בעולם. מפה אינטראקטיבית לזמני שבת עם פרשת השבוע. מהיר, מדויק וקל לשימוש.",
+        ogDescription: "מצאו זמני הדלקת נרות שבת והבדלה לכל מיקום בעולם. מפה אינטראקטיבית לזמני שבת עם פרשת השבוע.",
+        ogLocale: "he_IL",
+
         // Header
         title: "?מתי השבת שלי",
         subtitle: "מצאו זמני הדלקת נרות והבדלה לכל מיקום בעולם",
@@ -149,6 +161,46 @@ function updatePageLanguage() {
     document.documentElement.lang = lang;
     document.documentElement.dir = rtl ? 'rtl' : 'ltr';
     document.body.classList.toggle('rtl', rtl);
+
+    // Update SEO meta tags
+    document.title = t('metaTitle');
+
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+        metaDescription.setAttribute('content', t('metaDescription'));
+    }
+
+    const metaTitle = document.querySelector('meta[name="title"]');
+    if (metaTitle) {
+        metaTitle.setAttribute('content', t('metaTitle'));
+    }
+
+    // Update Open Graph tags
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) {
+        ogTitle.setAttribute('content', t('metaTitle'));
+    }
+
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) {
+        ogDescription.setAttribute('content', t('ogDescription'));
+    }
+
+    const ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) {
+        ogLocale.setAttribute('content', t('ogLocale'));
+    }
+
+    // Update Twitter tags
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) {
+        twitterTitle.setAttribute('content', t('metaTitle'));
+    }
+
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDescription) {
+        twitterDescription.setAttribute('content', t('ogDescription'));
+    }
 
     // Update static text elements
     const titleEl = document.querySelector('header h1');
