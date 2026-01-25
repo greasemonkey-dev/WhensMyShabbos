@@ -5,67 +5,60 @@ interface WorldMapProps {
   isVertical?: boolean;
 }
 
-// Paper cut-out style continents with more organic shapes
+// More detailed continent paths for realistic paper cut-out look
 const continents = [
-  // North America - organic paper cut shape
+  // North America (more detailed shape)
   {
-    path: "M 10,20 Q 12,16 18,15 Q 24,14 28,18 Q 30,22 28,28 Q 26,34 22,38 Q 18,40 14,38 Q 10,34 8,28 Q 7,24 10,20 Z",
-    color: "#7BA38C", // Sage green
-    shadow: 3,
+    path: `M 5,22 Q 6,18 10,16 L 14,14 Q 18,13 22,14 L 26,15 Q 28,16 29,18
+           L 30,22 Q 30,26 28,30 L 26,34 Q 24,37 20,38 L 16,38 Q 12,37 10,34
+           L 8,30 Q 6,26 5,22 Z
+           M 18,38 L 20,42 Q 22,45 20,48 L 18,46 Q 16,43 18,38 Z`,
+    shadowOffset: { x: 1.2, y: 1.8 },
   },
   // South America
   {
-    path: "M 24,44 Q 30,42 32,48 Q 33,54 30,62 Q 26,70 22,72 Q 19,70 20,62 Q 21,54 22,48 Q 23,44 24,44 Z",
-    color: "#8FBC8F", // Dark sea green
-    shadow: 2,
+    path: `M 22,46 Q 26,44 28,48 L 30,54 Q 31,60 28,66 L 24,72 Q 22,74 20,72
+           L 19,66 Q 18,60 20,54 L 22,46 Z`,
+    shadowOffset: { x: 1, y: 1.5 },
   },
-  // Europe
+  // Europe (with more detail)
   {
-    path: "M 44,18 Q 48,15 54,17 Q 56,20 54,24 Q 50,26 46,25 Q 42,24 42,20 Q 43,18 44,18 Z",
-    color: "#9DB4A0", // Muted green
-    shadow: 2,
+    path: `M 44,14 Q 46,12 50,12 L 54,13 Q 56,14 56,17 L 55,20 Q 54,23 51,24
+           L 47,24 Q 44,23 43,20 L 43,16 Q 43,14 44,14 Z
+           M 40,18 L 42,16 Q 43,17 42,19 L 40,18 Z`,
+    shadowOffset: { x: 1, y: 1.5 },
   },
   // Africa
   {
-    path: "M 44,30 Q 52,28 58,34 Q 60,42 56,52 Q 52,58 46,56 Q 40,52 40,44 Q 41,36 44,30 Z",
-    color: "#C4A574", // Sandy tan
-    shadow: 3,
+    path: `M 46,26 Q 50,24 54,26 L 58,30 Q 60,36 58,44 L 54,52 Q 50,58 46,56
+           L 42,50 Q 40,44 42,36 L 46,26 Z`,
+    shadowOffset: { x: 1.2, y: 1.8 },
   },
-  // Asia
+  // Asia (larger, more detailed)
   {
-    path: "M 56,14 Q 66,11 78,15 Q 88,18 90,26 Q 88,34 80,38 Q 70,40 62,36 Q 56,32 55,24 Q 55,18 56,14 Z",
-    color: "#A8B89A", // Soft olive
-    shadow: 4,
+    path: `M 56,10 Q 62,8 70,10 L 78,12 Q 85,14 90,18 L 92,24 Q 92,30 88,34
+           L 82,38 Q 76,40 68,38 L 60,34 Q 56,30 56,24 L 56,16 Q 56,12 56,10 Z
+           M 70,38 L 72,44 Q 74,48 70,50 L 68,46 Q 66,42 70,38 Z
+           M 86,28 L 90,30 Q 92,34 88,38 L 86,34 Q 84,30 86,28 Z`,
+    shadowOffset: { x: 1.5, y: 2 },
   },
   // Australia
   {
-    path: "M 80,52 Q 88,50 92,56 Q 92,62 86,66 Q 80,66 76,60 Q 76,54 80,52 Z",
-    color: "#D4A76A", // Warm ochre
-    shadow: 2,
+    path: `M 80,50 Q 86,48 90,52 L 92,58 Q 92,64 86,66 L 80,66 Q 76,64 76,58
+           L 78,52 Q 79,50 80,50 Z`,
+    shadowOffset: { x: 1, y: 1.5 },
+  },
+  // Greenland
+  {
+    path: `M 30,8 Q 34,6 38,8 L 40,12 Q 40,16 36,18 L 32,16 Q 28,14 30,8 Z`,
+    shadowOffset: { x: 0.8, y: 1.2 },
   },
 ];
-
-// Small paper stars
-const paperStars = [
-  { x: 5, y: 12, size: 12, rotation: 15 },
-  { x: 15, y: 8, size: 8, rotation: -10 },
-  { x: 35, y: 6, size: 10, rotation: 20 },
-  { x: 65, y: 5, size: 14, rotation: -5 },
-  { x: 85, y: 10, size: 9, rotation: 25 },
-  { x: 95, y: 25, size: 11, rotation: -15 },
-  { x: 3, y: 45, size: 8, rotation: 10 },
-  { x: 70, y: 70, size: 12, rotation: -20 },
-  { x: 38, y: 65, size: 10, rotation: 5 },
-  { x: 92, y: 45, size: 8, rotation: 30 },
-];
-
-// Paper star SVG path
-const starPath = "M 0,-10 L 2.5,-3 L 10,-3 L 4,2 L 6.5,10 L 0,5 L -6.5,10 L -4,2 L -10,-3 L -2.5,-3 Z";
 
 export const WorldMap: React.FC<WorldMapProps> = ({ isVertical = false }) => {
   const frame = useCurrentFrame();
 
-  // Layered fade in for paper depth effect
+  // Fade in animation
   const bgOpacity = interpolate(frame, [0, 20], [0, 1], {
     extrapolateRight: "clamp",
   });
@@ -75,47 +68,55 @@ export const WorldMap: React.FC<WorldMapProps> = ({ isVertical = false }) => {
     easing: Easing.out(Easing.ease),
   });
 
-  const starsOpacity = interpolate(frame, [20, 50], [0, 0.7], {
-    extrapolateRight: "clamp",
-  });
+  // Subtle floating animation for depth
+  const floatY = interpolate(
+    frame % 120,
+    [0, 60, 120],
+    [0, -2, 0]
+  );
 
   return (
     <AbsoluteFill>
-      {/* Base layer - deep blue paper background */}
+      {/* Light gray textured background */}
       <div
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
-          background: "linear-gradient(180deg, #1e3a5f 0%, #2d4a6f 30%, #1a3050 100%)",
+          background: "linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 50%, #c8c8c8 100%)",
           opacity: bgOpacity,
         }}
       />
 
-      {/* Paper texture overlay */}
+      {/* Diagonal line texture overlay */}
       <div
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
-          opacity: 0.15,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          mixBlendMode: "overlay",
+          opacity: 0.08,
+          backgroundImage: `repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(0, 0, 0, 0.1) 4px
+          )`,
         }}
       />
 
-      {/* Warm backlight glow (like lightbox behind paper) */}
+      {/* Paper texture noise */}
       <div
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
-          background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 200, 100, 0.12) 0%, transparent 70%)",
-          opacity: bgOpacity,
+          opacity: 0.04,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         }}
       />
 
-      {/* Paper cut continents */}
+      {/* Paper cut continents with 3D shadow effect */}
       <svg
         viewBox="0 0 100 80"
         style={{
@@ -123,101 +124,95 @@ export const WorldMap: React.FC<WorldMapProps> = ({ isVertical = false }) => {
           width: "100%",
           height: "100%",
           opacity: continentOpacity,
+          transform: `translateY(${floatY}px)`,
         }}
         preserveAspectRatio={isVertical ? "xMidYMid slice" : "xMidYMid meet"}
       >
         <defs>
-          {/* Paper texture filter */}
-          <filter id="paperTexture" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-            <feDiffuseLighting in="noise" lightingColor="#ffffff" surfaceScale="1.5" result="light">
-              <feDistantLight azimuth="45" elevation="60" />
-            </feDiffuseLighting>
-            <feComposite in="SourceGraphic" in2="light" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" />
+          {/* Soft shadow filter for paper depth */}
+          <filter id="paperShadow3D" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.8" result="blur" />
+            <feOffset in="blur" dx="1.5" dy="2" result="offsetBlur" />
+            <feFlood floodColor="#4a4a4a" floodOpacity="0.5" result="color" />
+            <feComposite in="color" in2="offsetBlur" operator="in" result="shadow" />
+            <feMerge>
+              <feMergeNode in="shadow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
 
-          {/* Drop shadow for paper depth */}
-          <filter id="paperShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0.5" dy="0.8" stdDeviation="0.4" floodColor="#0a1525" floodOpacity="0.5" />
+          {/* Gradient for paper surface */}
+          <linearGradient id="paperGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#f8f8f8" />
+            <stop offset="100%" stopColor="#f0f0f0" />
+          </linearGradient>
+
+          {/* Inner shadow for lifted paper effect */}
+          <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="0.3" result="blur" />
+            <feOffset in="blur" dx="-0.3" dy="-0.3" result="offsetBlur" />
+            <feFlood floodColor="#ffffff" floodOpacity="0.8" result="color" />
+            <feComposite in="color" in2="offsetBlur" operator="in" result="glow" />
+            <feMerge>
+              <feMergeNode in="SourceGraphic" />
+              <feMergeNode in="glow" />
+            </feMerge>
           </filter>
         </defs>
 
-        {/* Render continents with paper effect */}
+        {/* Render continents with layered shadow effect */}
         {continents.map((continent, index) => (
           <g key={index}>
-            {/* Shadow layer */}
+            {/* Deep shadow layer (furthest) */}
             <path
               d={continent.path}
-              fill="rgba(10, 20, 40, 0.4)"
-              transform={`translate(${continent.shadow * 0.3}, ${continent.shadow * 0.5})`}
-              style={{ filter: "blur(2px)" }}
+              fill="rgba(60, 60, 60, 0.3)"
+              transform={`translate(${continent.shadowOffset.x * 2}, ${continent.shadowOffset.y * 2})`}
+              style={{ filter: "blur(3px)" }}
             />
-            {/* Main paper layer */}
+            {/* Mid shadow layer */}
             <path
               d={continent.path}
-              fill={continent.color}
-              filter="url(#paperShadow)"
-              style={{
-                opacity: 0.9,
-              }}
+              fill="rgba(80, 80, 80, 0.4)"
+              transform={`translate(${continent.shadowOffset.x}, ${continent.shadowOffset.y})`}
+              style={{ filter: "blur(1.5px)" }}
             />
-            {/* Highlight edge (paper fold effect) */}
+            {/* Close shadow layer */}
+            <path
+              d={continent.path}
+              fill="rgba(100, 100, 100, 0.3)"
+              transform={`translate(${continent.shadowOffset.x * 0.5}, ${continent.shadowOffset.y * 0.5})`}
+              style={{ filter: "blur(0.5px)" }}
+            />
+            {/* Main white paper layer */}
+            <path
+              d={continent.path}
+              fill="url(#paperGradient)"
+              filter="url(#innerGlow)"
+            />
+            {/* Top highlight edge */}
             <path
               d={continent.path}
               fill="none"
-              stroke="rgba(255, 255, 255, 0.3)"
+              stroke="rgba(255, 255, 255, 0.9)"
               strokeWidth="0.3"
+              style={{
+                strokeDasharray: "none",
+                transform: "translate(-0.1px, -0.1px)"
+              }}
             />
           </g>
         ))}
       </svg>
 
-      {/* Paper cut stars */}
-      <svg
-        viewBox="0 0 100 80"
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          opacity: starsOpacity,
-        }}
-        preserveAspectRatio={isVertical ? "xMidYMid slice" : "xMidYMid meet"}
-      >
-        {paperStars.map((star, index) => {
-          const twinkle = interpolate(
-            (frame + index * 15) % 90,
-            [0, 45, 90],
-            [0.5, 1, 0.5]
-          );
-          return (
-            <g
-              key={index}
-              transform={`translate(${star.x}, ${star.y}) rotate(${star.rotation}) scale(${star.size / 100})`}
-            >
-              {/* Star shadow */}
-              <path
-                d={starPath}
-                fill="rgba(10, 20, 40, 0.3)"
-                transform="translate(0.5, 0.8)"
-              />
-              {/* Paper star */}
-              <path
-                d={starPath}
-                fill="#F5E6C8"
-                opacity={twinkle}
-              />
-            </g>
-          );
-        })}
-      </svg>
-
-      {/* Vignette - softer for paper feel */}
+      {/* Subtle vignette */}
       <div
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
-          background: "radial-gradient(ellipse at center, transparent 50%, rgba(15, 30, 50, 0.5) 100%)",
+          background: "radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.1) 100%)",
           pointerEvents: "none",
         }}
       />

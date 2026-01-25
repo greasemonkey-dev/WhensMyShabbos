@@ -108,7 +108,7 @@ export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
             background: "linear-gradient(180deg, #F5E6D3 0%, #EBD9C4 100%)",
             padding: isVertical ? "20px 50px" : "16px 40px",
             borderRadius: 6,
-            boxShadow: "3px 4px 12px rgba(10, 20, 40, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+            boxShadow: "4px 5px 15px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
             border: "1px solid rgba(180, 160, 140, 0.3)",
           }}
         >
@@ -178,7 +178,7 @@ export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
             style={{
               background: "linear-gradient(180deg, #E8923A 0%, #D4782A 100%)",
               padding: isVertical ? "18px 40px" : "14px 32px",
-              boxShadow: "3px 5px 15px rgba(10, 20, 40, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3)",
+              boxShadow: "4px 6px 18px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3)",
             }}
           >
             <div
@@ -237,7 +237,7 @@ export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
               background: "linear-gradient(180deg, #F5E6D3 0%, #EBD9C4 100%)",
               padding: isVertical ? "16px 32px" : "12px 24px",
               borderRadius: 8,
-              boxShadow: "3px 4px 12px rgba(10, 20, 40, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+              boxShadow: "4px 5px 15px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
               border: "1px solid rgba(180, 160, 140, 0.3)",
               display: "flex",
               alignItems: "center",
@@ -264,7 +264,7 @@ export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
             background: "linear-gradient(180deg, #E8923A 0%, #D4782A 100%)",
             padding: isVertical ? "16px 44px" : "12px 32px",
             borderRadius: 8,
-            boxShadow: "3px 4px 12px rgba(10, 20, 40, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.3)",
+            boxShadow: "4px 5px 15px rgba(0, 0, 0, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.3)",
             border: "1px solid rgba(180, 100, 50, 0.3)",
           }}
         >
@@ -305,7 +305,7 @@ export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
             padding: 8,
             background: "linear-gradient(180deg, #F5E6D3 0%, #EBD9C4 100%)",
             borderRadius: 8,
-            boxShadow: "3px 4px 12px rgba(10, 20, 40, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
+            boxShadow: "4px 5px 15px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
             border: "1px solid rgba(180, 160, 140, 0.3)",
           }}
         >

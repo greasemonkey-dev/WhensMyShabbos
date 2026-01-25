@@ -93,7 +93,7 @@ export const CityPin: React.FC<CityPinProps> = ({
         viewBox="-20 -25 40 55"
         style={{
           transform: `scale(${unfoldScale}) rotate(${unfoldRotation}deg)`,
-          filter: "drop-shadow(2px 3px 4px rgba(10, 20, 40, 0.4))",
+          filter: "drop-shadow(3px 4px 6px rgba(0, 0, 0, 0.35))",
         }}
       >
         {/* Candle base - paper rectangle */}
@@ -185,7 +185,7 @@ export const CityPin: React.FC<CityPinProps> = ({
             background: "linear-gradient(180deg, #F5E6D3 0%, #EBD9C4 100%)",
             padding: isVertical ? "10px 18px" : "8px 14px",
             borderRadius: 4,
-            boxShadow: "2px 3px 6px rgba(10, 20, 40, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5)",
+            boxShadow: "3px 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.6)",
             border: "1px solid rgba(180, 160, 140, 0.3)",
             textAlign: "center",
           }}
@@ -220,10 +220,10 @@ export const CityPin: React.FC<CityPinProps> = ({
             width: 8,
             height: 8,
             borderRadius: "50%",
-            background: "#1e3a5f",
+            background: "#d0d0d0",
             marginTop: -4,
             border: "2px solid #EBD9C4",
-            boxShadow: "inset 0 1px 2px rgba(0,0,0,0.3)",
+            boxShadow: "inset 0 1px 2px rgba(0,0,0,0.4)",
           }}
         />
       </div>
