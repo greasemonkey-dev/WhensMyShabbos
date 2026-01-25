@@ -4,7 +4,10 @@
   "description": "A map-based application to find Shabbos candle lighting times for any location",
   "main": "main.js",
   "scripts": {
-    "start": "python3 -m http.server 8000"
+    "start": "python3 -m http.server 8000",
+    "video:start": "cd video && npm run start",
+    "video:build": "cd video && npm run build",
+    "video:install": "cd video && npm install"
   },
   "keywords": [
     "shabbos",
