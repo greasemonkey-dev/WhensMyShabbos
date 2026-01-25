@@ -14,20 +14,20 @@ interface ShabbatWorldwideProps {
 }
 
 // City data with actual Shabbat times for January 24, 2025
-// Coordinates calibrated to standard world map projection
-// x: 0% = far left (~170°W), 100% = far right (~170°E)
-// y: 0% = top (~75°N), 100% = bottom (~60°S)
+// Coordinates calculated using Equirectangular projection
+// Longitude: -180° to +180° = 0% to 100%
+// Latitude: -60°S to 85°N = 100% to 0%
 const cities = [
-  // Sydney: 33.87°S, 151.21°E - Eastern Australia
-  { name: "Sydney", time: "7:52 PM", x: 86, y: 65, horizontalX: 86, horizontalY: 63 },
-  // Jerusalem: 31.77°N, 35.22°E - Middle East
-  { name: "Jerusalem", time: "4:38 PM", x: 57, y: 40, horizontalX: 57, horizontalY: 38 },
-  // London: 51.51°N, 0.13°W - Western Europe
-  { name: "London", time: "4:12 PM", x: 48, y: 30, horizontalX: 48, horizontalY: 27 },
-  // New York: 40.71°N, 74.01°W - US East Coast
-  { name: "New York", time: "4:42 PM", x: 25, y: 36, horizontalX: 25, horizontalY: 34 },
   // Los Angeles: 34.05°N, 118.24°W - US West Coast
-  { name: "Los Angeles", time: "4:58 PM", x: 15, y: 39, horizontalX: 15, horizontalY: 37 },
+  { name: "Los Angeles", time: "4:58 PM", x: 17.2, y: 35.1, horizontalX: 17.2, horizontalY: 35.1 },
+  // New York: 40.71°N, 74.01°W - US East Coast
+  { name: "New York", time: "4:42 PM", x: 29.4, y: 30.5, horizontalX: 29.4, horizontalY: 30.5 },
+  // London: 51.51°N, 0.13°W - Western Europe
+  { name: "London", time: "4:12 PM", x: 50.0, y: 23.1, horizontalX: 50.0, horizontalY: 23.1 },
+  // Jerusalem: 31.77°N, 35.22°E - Middle East
+  { name: "Jerusalem", time: "4:38 PM", x: 59.8, y: 36.7, horizontalX: 59.8, horizontalY: 36.7 },
+  // Sydney: 33.87°S, 151.21°E - Eastern Australia
+  { name: "Sydney", time: "7:52 PM", x: 92.0, y: 82.0, horizontalX: 92.0, horizontalY: 82.0 },
 ];
 
 export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
