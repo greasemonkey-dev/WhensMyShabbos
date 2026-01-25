@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  AbsoluteFill,
   interpolate,
   useCurrentFrame,
   Easing,
@@ -9,11 +8,15 @@ import {
 interface CityPinProps {
   cityName: string;
   time: string;
-  x: number; // percentage from left
-  y: number; // percentage from top
+  x: number;
+  y: number;
   appearFrame: number;
   isVertical?: boolean;
 }
+
+// Paper candle flame SVG path
+const flamePath = "M 0,-18 Q 6,-12 6,-6 Q 6,2 3,8 Q 1,12 0,14 Q -1,12 -3,8 Q -6,2 -6,-6 Q -6,-12 0,-18 Z";
+const innerFlamePath = "M 0,-12 Q 3,-8 3,-4 Q 3,1 1.5,5 Q 0.5,8 0,9 Q -0.5,8 -1.5,5 Q -3,1 -3,-4 Q -3,-8 0,-12 Z";
 
 export const CityPin: React.FC<CityPinProps> = ({
   cityName,
@@ -26,46 +29,48 @@ export const CityPin: React.FC<CityPinProps> = ({
   const frame = useCurrentFrame();
   const relativeFrame = frame - appearFrame;
 
-  // Don't render before appear frame
   if (relativeFrame < 0) return null;
 
-  // Pin drop animation (0-10 frames)
-  const pinScale = interpolate(relativeFrame, [0, 10], [0, 1], {
+  // Paper unfold animation
+  const unfoldScale = interpolate(relativeFrame, [0, 15], [0, 1], {
     extrapolateRight: "clamp",
-    easing: Easing.out(Easing.back(1.5)),
+    easing: Easing.out(Easing.back(1.3)),
   });
 
-  const pinOpacity = interpolate(relativeFrame, [0, 5], [0, 1], {
-    extrapolateRight: "clamp",
-  });
-
-  // Glow pulse animation (continuous after appear)
-  const glowScale = interpolate(
-    relativeFrame % 30,
-    [0, 15, 30],
-    [1, 1.5, 1],
-    { extrapolateRight: "clamp" }
-  );
-
-  const glowOpacity = interpolate(
-    relativeFrame % 30,
-    [0, 15, 30],
-    [0.8, 0.3, 0.8],
-    { extrapolateRight: "clamp" }
-  );
-
-  // Text fade in (slightly delayed)
-  const textOpacity = interpolate(relativeFrame, [5, 15], [0, 1], {
-    extrapolateRight: "clamp",
-  });
-
-  const textY = interpolate(relativeFrame, [5, 15], [10, 0], {
+  const unfoldRotation = interpolate(relativeFrame, [0, 15], [-15, 0], {
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.ease),
   });
 
-  const fontSize = isVertical ? 24 : 18;
-  const pinSize = isVertical ? 20 : 16;
+  const opacity = interpolate(relativeFrame, [0, 8], [0, 1], {
+    extrapolateRight: "clamp",
+  });
+
+  // Gentle flame flicker (paper-like subtle movement)
+  const flickerX = interpolate(
+    (relativeFrame * 2) % 40,
+    [0, 10, 20, 30, 40],
+    [0, 1, -0.5, 0.8, 0]
+  );
+
+  const flickerScale = interpolate(
+    (relativeFrame * 2) % 60,
+    [0, 15, 30, 45, 60],
+    [1, 1.05, 0.98, 1.03, 1]
+  );
+
+  // Text slide in
+  const textOpacity = interpolate(relativeFrame, [8, 20], [0, 1], {
+    extrapolateRight: "clamp",
+  });
+
+  const textY = interpolate(relativeFrame, [8, 20], [15, 0], {
+    extrapolateRight: "clamp",
+    easing: Easing.out(Easing.ease),
+  });
+
+  const fontSize = isVertical ? 26 : 20;
+  const flameSize = isVertical ? 1.4 : 1;
 
   return (
     <div
@@ -78,83 +83,149 @@ export const CityPin: React.FC<CityPinProps> = ({
         flexDirection: "column",
         alignItems: "center",
         zIndex: 10,
+        opacity,
       }}
     >
-      {/* Outer glow pulse */}
-      <div
+      {/* Paper candle with flame */}
+      <svg
+        width={60 * flameSize}
+        height={80 * flameSize}
+        viewBox="-20 -25 40 55"
         style={{
-          position: "absolute",
-          width: pinSize * 4,
-          height: pinSize * 4,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(248,180,0,0.6) 0%, rgba(248,180,0,0) 70%)",
-          transform: `scale(${glowScale})`,
-          opacity: glowOpacity * pinOpacity,
-        }}
-      />
-
-      {/* Inner glow */}
-      <div
-        style={{
-          position: "absolute",
-          width: pinSize * 2,
-          height: pinSize * 2,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,200,50,0.9) 0%, rgba(248,180,0,0.4) 60%, rgba(248,180,0,0) 100%)",
-          opacity: pinOpacity,
-          transform: `scale(${pinScale})`,
-        }}
-      />
-
-      {/* Pin center */}
-      <div
-        style={{
-          width: pinSize,
-          height: pinSize,
-          borderRadius: "50%",
-          background: "linear-gradient(135deg, #ffd700 0%, #f8b400 50%, #e6a000 100%)",
-          boxShadow: "0 0 20px rgba(248,180,0,0.8), 0 0 40px rgba(248,180,0,0.4)",
-          opacity: pinOpacity,
-          transform: `scale(${pinScale})`,
-          zIndex: 2,
-        }}
-      />
-
-      {/* City name and time */}
-      <div
-        style={{
-          marginTop: pinSize + 8,
-          textAlign: "center",
-          opacity: textOpacity,
-          transform: `translateY(${textY}px)`,
+          transform: `scale(${unfoldScale}) rotate(${unfoldRotation}deg)`,
+          filter: "drop-shadow(2px 3px 4px rgba(10, 20, 40, 0.4))",
         }}
       >
+        {/* Candle base - paper rectangle */}
+        <rect
+          x="-6"
+          y="8"
+          width="12"
+          height="20"
+          rx="1"
+          fill="#F5E6D3"
+          stroke="rgba(180, 160, 140, 0.5)"
+          strokeWidth="0.5"
+        />
+        {/* Candle highlight */}
+        <rect
+          x="-4"
+          y="10"
+          width="3"
+          height="16"
+          rx="0.5"
+          fill="rgba(255, 255, 255, 0.4)"
+        />
+
+        {/* Wick */}
+        <line
+          x1="0"
+          y1="8"
+          x2="0"
+          y2="2"
+          stroke="#4A4A4A"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+
+        {/* Flame - outer (orange paper) */}
+        <g transform={`translate(${flickerX}, 0) scale(${flickerScale})`}>
+          {/* Flame shadow */}
+          <path
+            d={flamePath}
+            fill="rgba(10, 20, 40, 0.2)"
+            transform="translate(1, 2) scale(0.9)"
+          />
+          {/* Outer flame - warm orange paper */}
+          <path
+            d={flamePath}
+            fill="#E8923A"
+            transform="translate(0, -2)"
+          />
+          {/* Middle flame - yellow paper */}
+          <path
+            d={innerFlamePath}
+            fill="#F5C846"
+            transform="translate(0, -2)"
+          />
+          {/* Inner flame - light cream paper */}
+          <path
+            d="M 0,-8 Q 1.5,-5 1.5,-2 Q 1.5,1 0,4 Q -1.5,1 -1.5,-2 Q -1.5,-5 0,-8 Z"
+            fill="#FFF8E7"
+            transform="translate(0, -2)"
+          />
+        </g>
+
+        {/* Paper fold line on candle */}
+        <line
+          x1="0"
+          y1="10"
+          x2="0"
+          y2="26"
+          stroke="rgba(180, 160, 140, 0.3)"
+          strokeWidth="0.5"
+          strokeDasharray="2,2"
+        />
+      </svg>
+
+      {/* City label - paper tag style */}
+      <div
+        style={{
+          marginTop: 8,
+          opacity: textOpacity,
+          transform: `translateY(${textY}px)`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {/* Paper tag background */}
         <div
           style={{
-            fontSize: fontSize,
-            fontWeight: 700,
-            color: "#ffffff",
-            textShadow: "0 2px 10px rgba(0,0,0,0.8)",
-            fontFamily: "system-ui, -apple-system, sans-serif",
-            letterSpacing: "0.5px",
+            background: "linear-gradient(180deg, #F5E6D3 0%, #EBD9C4 100%)",
+            padding: isVertical ? "10px 18px" : "8px 14px",
+            borderRadius: 4,
+            boxShadow: "2px 3px 6px rgba(10, 20, 40, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5)",
+            border: "1px solid rgba(180, 160, 140, 0.3)",
+            textAlign: "center",
           }}
         >
-          {cityName}
+          <div
+            style={{
+              fontSize: fontSize,
+              fontWeight: 600,
+              color: "#3D3D3D",
+              fontFamily: "'Georgia', serif",
+              letterSpacing: "0.5px",
+              marginBottom: 2,
+            }}
+          >
+            {cityName}
+          </div>
+          <div
+            style={{
+              fontSize: fontSize + 6,
+              fontWeight: 700,
+              color: "#B8602A",
+              fontFamily: "'Georgia', serif",
+            }}
+          >
+            {time}
+          </div>
         </div>
+
+        {/* Paper tag string/hole detail */}
         <div
           style={{
-            fontSize: fontSize + 4,
-            fontWeight: 800,
-            background: "linear-gradient(90deg, #f8b400, #ffd700)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textShadow: "none",
-            fontFamily: "system-ui, -apple-system, sans-serif",
-            marginTop: 2,
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: "#1e3a5f",
+            marginTop: -4,
+            border: "2px solid #EBD9C4",
+            boxShadow: "inset 0 1px 2px rgba(0,0,0,0.3)",
           }}
-        >
-          {time}
-        </div>
+        />
       </div>
     </div>
   );
