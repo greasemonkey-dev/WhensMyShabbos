@@ -14,13 +14,20 @@ interface ShabbatWorldwideProps {
 }
 
 // City data with actual Shabbat times for January 24, 2025
-// Times reflect winter in Northern Hemisphere, summer in Southern
+// Coordinates calibrated to standard world map projection
+// x: 0% = far left (~170°W), 100% = far right (~170°E)
+// y: 0% = top (~75°N), 100% = bottom (~60°S)
 const cities = [
-  { name: "Sydney", time: "7:52 PM", x: 85, y: 58, horizontalX: 85, horizontalY: 58 },      // Summer - late sunset
-  { name: "Jerusalem", time: "4:38 PM", x: 55, y: 32, horizontalX: 55, horizontalY: 28 },  // Winter - early sunset
-  { name: "London", time: "4:12 PM", x: 47, y: 22, horizontalX: 47, horizontalY: 18 },     // Winter - very early
-  { name: "New York", time: "4:42 PM", x: 24, y: 30, horizontalX: 24, horizontalY: 26 },   // Winter - early
-  { name: "Los Angeles", time: "4:58 PM", x: 12, y: 34, horizontalX: 12, horizontalY: 30 }, // Winter - slightly later
+  // Sydney: 33.87°S, 151.21°E - Eastern Australia
+  { name: "Sydney", time: "7:52 PM", x: 86, y: 65, horizontalX: 86, horizontalY: 63 },
+  // Jerusalem: 31.77°N, 35.22°E - Middle East
+  { name: "Jerusalem", time: "4:38 PM", x: 57, y: 40, horizontalX: 57, horizontalY: 38 },
+  // London: 51.51°N, 0.13°W - Western Europe
+  { name: "London", time: "4:12 PM", x: 48, y: 30, horizontalX: 48, horizontalY: 27 },
+  // New York: 40.71°N, 74.01°W - US East Coast
+  { name: "New York", time: "4:42 PM", x: 25, y: 36, horizontalX: 25, horizontalY: 34 },
+  // Los Angeles: 34.05°N, 118.24°W - US West Coast
+  { name: "Los Angeles", time: "4:58 PM", x: 15, y: 39, horizontalX: 15, horizontalY: 37 },
 ];
 
 export const ShabbatWorldwide: React.FC<ShabbatWorldwideProps> = ({
